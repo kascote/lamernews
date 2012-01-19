@@ -1,0 +1,13 @@
+<section id="newslist">
+  <% news.each do |item| %>
+    <%if item['del'] %>
+      <article class="deleted">[deleted news]</article>
+    <% else %>
+      <%= erb :news, :locals => {:news => item} %>
+    <% end %>
+  <% end %>
+</section>
+
+<% if (pager > 0) %>
+  <a href="/latest/<%= pager %>">[more]</a>
+<% end %>

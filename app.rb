@@ -29,11 +29,11 @@ require 'app_config'
 require 'rubygems'
 require 'hiredis'
 require 'redis'
-require 'page'
 require 'sinatra'
 require 'json'
 require 'digest/sha1'
 require 'digest/md5'
+require 'page'
 require 'comments'
 require 'pbkdf2'
 require 'openssl' if UseOpenSSL
@@ -42,7 +42,7 @@ Version = "0.9.2"
 
 before do
     $r = Redis.new(:host => RedisHost, :port => RedisPort) if !$r
-    H = HTMLGen.new if !defined?(H)
+    #H = HTMLGen.new if !defined?(H)
     if !defined?(Comments)
         Comments = RedisComments.new($r,"comment",proc{|c,level|
             c.sort {|a,b|
@@ -66,11 +66,16 @@ before do
 end
 
 get '/' do
-    H.set_title "Top News - #{SiteName}"
-    news,numitems = get_top_news
-    H.page {
-        H.h2 {"Top news"}+news_list_to_html(news)
-    }
+  news, numitems = get_top_news
+  erb :index, :locals => { :news => news, :pager => -1 }
+
+
+    #H.set_title "Top News - #{SiteName}"
+    #news,numitems = get_top_news
+    #H.page {
+    #    H.h2 {"Top news"}+news_list_to_html(news)
+    #}
+
 end
 
 get '/rss' do
@@ -97,23 +102,36 @@ get '/latest' do
 end
 
 get '/latest/:start' do
-    start = params[:start].to_i
+  start = params[:start].to_i
+
+  news, numitems = get_latest_news(start,50)
+
+  pager = -1
+  if (start+50) < numitems
+    pager = start+50
+  end
+
+  erb :index, :locals => {:news => news, :pager => pager}
+
+=begin
     H.set_title "Latest news - #{SiteName}"
+
     paginate = {
-        :get => Proc.new {|start,count|
-            get_latest_news(start,count)
-        },
-        :render => Proc.new {|item| news_to_html(item)},
-        :start => start,
-        :perpage => LatestNewsPerPage,
-        :link => "/latest/$"
+      :get => Proc.new {|start,count| get_latest_news(start,count) },
+      :render => Proc.new {|item| erb(:news, :locals => {:news => item}, :layout => nil) },
+      :start => 0,
+      :perpage => LatestNewsPerPage,
+      :link => "/latest/$"
     }
+
     H.page {
         H.h2 {"Latest news"}
         H.section(:id => "newslist") {
             list_items(paginate)
         }
     }
+=end
+
 end
 
 get '/saved/:start' do
@@ -816,6 +834,7 @@ def replies_link
     }
 end
 
+=begin
 def application_header
     navitems = [    ["top","/"],
                     ["latest","/latest/0"],
@@ -845,6 +864,7 @@ def application_header
         }+navbar+" "+rnavbar
     }
 end
+=end
 
 def application_footer
     if $user
@@ -1021,7 +1041,9 @@ end
 
 # Has the user submitted a news story in the last `NewsSubmissionBreak` seconds?
 def submitted_recently
-    allowed_to_post_in_seconds > 0
+  #TODO: REMOVE
+  return false
+  #allowed_to_post_in_seconds > 0
 end
 
 # Indicates when the user is allowed to submit another story after the last.
@@ -1385,6 +1407,7 @@ end
 # a linked title with buttons to up/down vote plus additional info.
 # This function expects as input a news entry as obtained from
 # the get_news_by_id function.
+=begin
 def news_to_html(news)
     return H.article(:class => "deleted") {
         "[deleted news]"
@@ -1441,6 +1464,7 @@ def news_to_html(news)
         else "" end
     }+"\n"
 end
+=end
 
 # If 'news' is a list of news entries (Ruby hashes with the same fields of
 # the Redis hash representing the news in the DB) this function will render
@@ -1456,6 +1480,7 @@ end
 # If 'news' is a list of news entries (Ruby hashes with the same fields of
 # the Redis hash representing the news in the DB) this function will render
 # the HTML needed to show this news.
+=begin
 def news_list_to_html(news)
     H.section(:id => "newslist") {
         aux = ""
@@ -1465,6 +1490,7 @@ def news_list_to_html(news)
         aux
     }
 end
+=end
 
 # Updating the rank would require some cron job and worker in theory as
 # it is time dependent and we don't want to do any sorting operation at
@@ -1513,6 +1539,56 @@ def get_saved_news(user_id,start,count)
     numitems = $r.zcard("user.saved:#{user_id}").to_i
     news_ids = $r.zrevrange("user.saved:#{user_id}",start,start+(count-1))
     return get_news_by_id(news_ids),numitems
+end
+
+###############################################################################
+# Views Helper functions
+###############################################################################
+
+helpers do
+
+  def get_arrow_class(news, kind)
+    if news['voted'] == :up
+      kind == :up ? 'uparrow voted' : 'downarrow disabled'
+    elsif news['voted'] == :down
+      kind == :up ? 'uparrow disabled' : 'downarrow voted'
+    end
+  end
+
+  def is_editable?(news)
+    $user and ($user['id'].to_i == news['user_id'].to_i) and (news['ctime'].to_i > (Time.now.to_i - NewsEditTime))
+  end
+
+  def is_logged_in?
+    !$user.nil?
+  end
+
+  def get_domain(news)
+    d = news_domain(news)
+    d.nil? ? '' : "at #{d}"
+  end
+
+  def debug_code(news)
+    if params and params[:debug] and $user and user_is_admin?($user)
+      "score: #{news["score"].to_s} rank: #{compute_news_rank(news).to_s}"
+    end
+  end
+
+  def entities(s)
+      CGI::escapeHTML(s)
+  end
+
+  def unentities(s)
+      CGI::unescapeHTML(s)
+  end
+
+  def urlencode(s)
+      CGI::escape(s)
+  end
+
+  def urldecode(s)
+      CGI::unescape(s)
+  end
 end
 
 ###############################################################################
