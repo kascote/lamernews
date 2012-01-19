@@ -67,7 +67,7 @@ end
 
 get '/' do
   news, numitems = get_top_news
-  erb :index, :locals => { :news => news, :pager => -1 }
+  erb :index, :locals => { :news => news, :pager => -1, :title => 'Top News' }
 
 
     #H.set_title "Top News - #{SiteName}"
@@ -111,7 +111,7 @@ get '/latest/:start' do
     pager = start+50
   end
 
-  erb :index, :locals => {:news => news, :pager => pager}
+  erb :index, :locals => {:news => news, :pager => pager, :title => 'Latest News'}
 
 =begin
     H.set_title "Latest news - #{SiteName}"
@@ -199,6 +199,8 @@ get '/replies' do
 end
 
 get '/login' do
+  erb :login, :locals => {:title => 'Sign In Form'}
+=begin
     H.set_title "Login - #{SiteName}"
     H.page {
         H.div(:id => "login") {
@@ -219,10 +221,13 @@ get '/login' do
             });
         '}
     }
+=end
 end
 
 get '/submit' do
     redirect "/login" if !$user
+    erb :submit, :locals => {:title => 'Submit News'}
+=begin
     H.set_title "Submit a new story - #{SiteName}"
     H.page {
         H.h2 {"Submit a new story"}+
@@ -255,6 +260,7 @@ get '/submit' do
             });
         '}
     }
+=end
 end
 
 get '/logout' do
@@ -277,10 +283,15 @@ get "/news/:news_id" do
             "topcomment" => true
         }
         user = get_user_by_id(news["user_id"]) || DeletedUser
-        top_comment = H.topcomment {comment_to_html(c,user)}
+        top_comment = 'comments' #H.topcomment {comment_to_html(c,user)}
     else
         top_comment = ""
     end
+
+    erb :show, :locals => {:title => entities(news['title']), :news => news, :comment => top_comment, :user => $user}
+
+
+=begin
     H.set_title "#{H.entities news["title"]} - #{SiteName}"
     H.page {
         H.section(:id => "newslist") {
@@ -304,6 +315,7 @@ get "/news/:news_id" do
             });
         '}
     }
+=end
 end
 
 get "/comment/:news_id/:comment_id" do
@@ -523,8 +535,7 @@ get '/api/login' do
             :error => "Username and password are two required fields."
         }.to_json
     end
-    auth,apisecret = check_user_credentials(params[:username],
-                                            params[:password])
+    auth,apisecret = check_user_credentials(params[:username], params[:password])
     if auth
         return {
             :status => "ok",
@@ -866,6 +877,7 @@ def application_header
 end
 =end
 
+=begin
 def application_footer
     if $user
         apisecret = H.script() {
@@ -894,6 +906,7 @@ def application_footer
         }.select{|l| l}.join(" | ")
     }+apisecret+keyboardnavigation
 end
+=end
 
 ################################################################################
 # User and authentication
@@ -1862,3 +1875,10 @@ def list_items(o)
     aux
 end
 
+def get_bookmarlet
+  "javascript:window.location=%22#{SiteUrl}/submit?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)"
+end
+
+def get_apisecret
+  "var apisecret = '#{$user['apisecret']}';"
+end

@@ -69,6 +69,7 @@ td { vertical-align: top; }
    ========================================================================== */
 
 #main                                         { margin-left: 30px; }
+.page-title                                   { font-weight: normal; }
 .news-title                                   { display: inline; font-size: 22px; line-height: 40px; font-weight: normal; }
 .news-article                                 { margin: 20px 0; }
 .news-article .domain                         { display: inline; font-style: normal; color: #999; }
@@ -89,6 +90,16 @@ td { vertical-align: top; }
 .header .link-nav                             { color: #666; padding: 0 10px; font-size: 18px}
 .header .account                              { position: absolute; top: 30px; right: 20px; font-size: 18px; }
 .footer                                       { margin-top: 50px; border-top: 5px double #ddd; text-align: center; padding: 20px 0; }
+#login                                        { margin: 20px 0; }
+#loginform                                    { width: 300px; }
+#submitnews                                   { width: 400px; }
+.form .textarea,
+.form .textfield                              { width: 300px; height: 20px; font-size: 16px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
+.form .labelform                              { font-size: 16px; }
+.form .submit                                 { display: block; margin: 20px 0; padding: 5px 20px; }
+.form .textarea                               { width: 400px; height: 100px; }
+#submitnews .textfield                        { width: 400px !important; }
+
 
 
 

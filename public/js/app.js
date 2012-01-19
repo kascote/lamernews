@@ -23,6 +23,9 @@ function login() {
 }
 
 function submit() {
+try {
+    console.log(typeof(apisecret));
+    if (typeof(apisecret) == 'undefined') return false; // Not logged in
     var data = {
         news_id: $("input[name=news_id]").val(),
         title: $("input[name=title]").val(),
@@ -47,6 +50,9 @@ function submit() {
             }
         }
     });
+} catch (e) {
+  console.log(e);
+}
     return false;
 }
 
@@ -267,3 +273,35 @@ $(function() {
         }
     });
 });
+
+
+
+
+
+
+NIP.initfuncs = {
+  loginform: function() {
+    $('#loginform').submit(login);
+    $('#username').focus();
+  },
+  submitnews: function() {
+    $('#submitnews').submit(submit);
+    $('#title').focus();
+  },
+  postcomment: function() {
+    $('#commentform').submit(post_comment);
+  }
+}
+
+NIP.startup = function() {
+  $.each(NIP.init, function(i,e) {
+    NIP.initfuncs[e].call();
+  });
+}
+
+
+$(function() {
+  NIP.startup();
+  setKeyboardNavigation();
+});
+

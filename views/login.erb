@@ -1,0 +1,15 @@
+<section id="login">
+  <form id="loginform" class="form" name="f">
+    <label class="labelform" for="username">username</label>
+    <input class="textfield" type="text" id="username" name="username">
+    <label class="labelform" for="password">password</label>
+    <input class="textfield" type="text" id="password" name="password">
+    <input type="checkbox" name="register" value="1">
+    <label class="labelform" for="register">create account</label>
+    <button class="submit" type="submit">sign in</button>
+  </form>
+</section>
+<div id="errormsg"></div>
+<script>
+  NIP.init.push('loginform');
+</script>
