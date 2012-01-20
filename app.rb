@@ -283,12 +283,12 @@ get "/news/:news_id" do
             "topcomment" => true
         }
         user = get_user_by_id(news["user_id"]) || DeletedUser
-        top_comment = 'comments' #H.topcomment {comment_to_html(c,user)}
+        top_comment = erb(:comments, :locals => {:news => news, :comment => c, :user => user}, :layout => false)
     else
-        top_comment = ""
+      top_comment = ''
     end
 
-    erb :show, :locals => {:title => entities(news['title']), :news => news, :comment => top_comment, :user => $user}
+    erb :show, :locals => {:title => entities(news['title']), :news => news, :comment => c, :top_comment => top_comment, :user => user }
 
 
 =begin
@@ -1560,12 +1560,46 @@ end
 
 helpers do
 
-  def get_arrow_class(news, kind)
-    if news['voted'] == :up
-      kind == :up ? 'uparrow voted' : 'downarrow disabled'
-    elsif news['voted'] == :down
-      kind == :up ? 'uparrow disabled' : 'downarrow voted'
+  def get_arrow_class(voted, kind)
+    if voted == :up
+      kind == :up ? 'voted' : 'disabled'
+    elsif voted == :down
+      kind == :up ? 'disabled' : 'voted'
     end
+  end
+
+  def comment_arrow_class(c, kind)
+    down = c['down']
+    up = c['up']
+    if kind == :up
+      if is_logged_in? and up and up.index($user['id'].to_i)
+        return "voted"
+      elsif is_logged_in? and down and down.index($user['id'].to_i)
+        return "disabled"
+      end
+    else
+      if is_logged_in? and up and up.index($user['id'].to_i)
+        return "disabled"
+      elsif is_logged_in? and down and down.index($user['id'].to_i)
+        return "voted"
+      end
+    end
+
+  end
+
+  def comment_indent(c)
+    "margin-left:#{c['level'].to_i*CommentReplyShift}px"
+  end
+
+  def gravatar_url(user)
+    digest = Digest::MD5.hexdigest(user["email"] || "")
+    "http://gravatar.com/avatar/#{digest}?s=48&d=mm"
+  end
+
+  def show_edit_link(comment)
+    show_edit_link = !comment['topcomment'] &&
+                     ($user && ($user['id'].to_i == comment['user_id'].to_i)) &&
+                     (comment['ctime'].to_i > (Time.now.to_i - CommentEditTime))
   end
 
   def is_editable?(news)
@@ -1581,6 +1615,11 @@ helpers do
     d.nil? ? '' : "at #{d}"
   end
 
+  def news_url(news)
+    d = news_domain(news)
+    d.nil? ? "/news/#{news["id"]}" : news['url']
+  end
+
   def debug_code(news)
     if params and params[:debug] and $user and user_is_admin?($user)
       "score: #{news["score"].to_s} rank: #{compute_news_rank(news).to_s}"
@@ -1588,7 +1627,7 @@ helpers do
   end
 
   def entities(s)
-      CGI::escapeHTML(s)
+    s.nil? ? '' : CGI::escapeHTML(s)
   end
 
   def unentities(s)
@@ -1880,5 +1919,5 @@ def get_bookmarlet
 end
 
 def get_apisecret
-  "var apisecret = '#{$user['apisecret']}';"
+  "var apisecret = '#{is_logged_in? ? $user['apisecret'] : ''}';"
 end

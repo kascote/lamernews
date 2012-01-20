@@ -1,18 +1,18 @@
 <section id="newslist">
   <%= erb :news, :locals => {:news => news } %>
-  <%= erb( :comments, :locals => {:news => news, :comment => comment, :user => user}) if comment %>
 </section>
+<%= top_comment %>
 <% if is_logged_in? %>
   <form id="commentform" class="form" name="f">
-    <input type="hidden" names="news_id" value="<%= news['id'] %>">
-    <input type="hidden" names="comment_id" value="<%= news['comment_id'] %>">
-    <input type="hidden" names="parent_id" value="<%= news['parent_id'] %>">
+    <input type="hidden" name="news_id" value="<%= news['id'] %>">
+    <input type="hidden" name="comment_id" value="-1">
+    <input type="hidden" name="parent_id" value="-1">
     <textarea class="textarea" name="comment" cols="60" rows="10"></textarea>
     <button class="submit" type="submit" name="post_comment">post comment</button>
   </form>
 <% end %>
 <div id="comments">
-
+  <%= erb( :comments, :locals => {:news => news, :comment => comment, :user => user}) if comment %>
 </div>
 <script>
   NIP.init.push('postcomment');
