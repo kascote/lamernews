@@ -93,11 +93,9 @@ function post_comment() {
         success: function(r) {
             if (r.status == "ok") {
                 if (r.op == "insert") {
-                    window.location.href = "/news/"+r.news_id+"?r="+Math.random()+"#"+
-                        r.news_id+"-"+r.comment_id;
+                    window.location.href = "/news/"+r.news_id+"?r="+Math.random()+"#"+r.news_id+"-"+r.comment_id;
                 } else if (r.op == "update") {
-                    window.location.href = "/editcomment/"+r.news_id+"/"+
-                                           r.comment_id;
+                    window.location.href = "/editcomment/"+r.news_id+"/"+r.comment_id;
                 } else if (r.op == "delete") {
                     window.location.href = "/news/"+r.news_id;
                 }
@@ -290,7 +288,11 @@ NIP.initfuncs = {
   },
   postcomment: function() {
     $('#commentform').submit(post_comment);
+  },
+  updateprofile: function() {
+    $('#profileform').submit(update_profile);
   }
+
 }
 
 NIP.startup = function() {

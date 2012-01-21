@@ -68,14 +68,6 @@ end
 get '/' do
   news, numitems = get_top_news
   erb :index, :locals => { :news => news, :pager => -1, :title => 'Top News' }
-
-
-    #H.set_title "Top News - #{SiteName}"
-    #news,numitems = get_top_news
-    #H.page {
-    #    H.h2 {"Top news"}+news_list_to_html(news)
-    #}
-
 end
 
 get '/rss' do
@@ -112,26 +104,6 @@ get '/latest/:start' do
   end
 
   erb :index, :locals => {:news => news, :pager => pager, :title => 'Latest News'}
-
-=begin
-    H.set_title "Latest news - #{SiteName}"
-
-    paginate = {
-      :get => Proc.new {|start,count| get_latest_news(start,count) },
-      :render => Proc.new {|item| erb(:news, :locals => {:news => item}, :layout => nil) },
-      :start => 0,
-      :perpage => LatestNewsPerPage,
-      :link => "/latest/$"
-    }
-
-    H.page {
-        H.h2 {"Latest news"}
-        H.section(:id => "newslist") {
-            list_items(paginate)
-        }
-    }
-=end
-
 end
 
 get '/saved/:start' do
@@ -200,260 +172,105 @@ end
 
 get '/login' do
   erb :login, :locals => {:title => 'Sign In Form'}
-=begin
-    H.set_title "Login - #{SiteName}"
-    H.page {
-        H.div(:id => "login") {
-            H.form(:name=>"f") {
-                H.label(:for => "username") {"username"}+
-                H.inputtext(:id => "username", :name => "username")+
-                H.label(:for => "password") {"password"}+
-                H.inputpass(:id => "password", :name => "password")+H.br+
-                H.checkbox(:name => "register", :value => "1")+
-                "create account"+H.br+
-                H.submit(:name => "do_login", :value => "Login")
-            }
-        }+
-        H.div(:id => "errormsg"){}+
-        H.script() {'
-            $(function() {
-                $("form[name=f]").submit(login);
-            });
-        '}
-    }
-=end
 end
 
 get '/submit' do
-    redirect "/login" if !$user
-    erb :submit, :locals => {:title => 'Submit News'}
-=begin
-    H.set_title "Submit a new story - #{SiteName}"
-    H.page {
-        H.h2 {"Submit a new story"}+
-        H.div(:id => "submitform") {
-            H.form(:name=>"f") {
-                H.inputhidden(:name => "news_id", :value => -1)+
-                H.label(:for => "title") {"title"}+
-                H.inputtext(:id => "title", :name => "title", :size => 80, :value => (params[:t] ? H.entities(params[:t]) : ""))+H.br+
-                H.label(:for => "url") {"url"}+H.br+
-                H.inputtext(:id => "url", :name => "url", :size => 60, :value => (params[:u] ? H.entities(params[:u]) : ""))+H.br+
-                "or if you don't have an url type some text"+
-                H.br+
-                H.label(:for => "text") {"text"}+
-                H.textarea(:id => "text", :name => "text", :cols => 60, :rows => 10) {}+
-                H.button(:name => "do_submit", :value => "Submit")
-            }
-        }+
-        H.div(:id => "errormsg"){}+
-        H.p {
-            bl = "javascript:window.location=%22#{SiteUrl}/submit?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)"
-            "Submitting news is simpler using the "+
-            H.a(:href => bl) {
-                "bookmarklet"
-            }+
-            " (drag the link to your browser toolbar)"
-        }+
-        H.script() {'
-            $(function() {
-                $("input[name=do_submit]").click(submit);
-            });
-        '}
-    }
-=end
+  redirect "/login" if !$user
+  erb :submit, :locals => {:title => 'Submit News'}
 end
 
 get '/logout' do
-    if $user and check_api_secret
-        update_auth_token($user["id"])
-    end
-    redirect "/"
+  if $user and check_api_secret
+      update_auth_token($user["id"])
+  end
+  redirect "/"
 end
 
 get "/news/:news_id" do
-    news = get_news_by_id(params["news_id"])
-    halt(404,"404 - This news does not exist.") if !news
-    # Show the news text if it is a news without URL.
-    if !news_domain(news)
-        c = {
-            "body" => news_text(news),
-            "ctime" => news["ctime"],
-            "user_id" => news["user_id"],
-            "thread_id" => news["id"],
-            "topcomment" => true
-        }
-        user = get_user_by_id(news["user_id"]) || DeletedUser
-        top_comment = erb(:comments, :locals => {:news => news, :comment => c, :user => user}, :layout => false)
-    else
-      top_comment = ''
-    end
+  news = get_news_by_id(params["news_id"])
+  halt(404,"404 - This news does not exist.") if !news
+  # Show the news text if it is a news without URL.
+  if !news_domain(news)
+      c = {
+          "body" => news_text(news),
+          "ctime" => news["ctime"],
+          "user_id" => news["user_id"],
+          "thread_id" => news["id"],
+          "topcomment" => true
+      }
+      user = get_user_by_id(news["user_id"]) || DeletedUser
+      top_comment = erb(:comment, :locals => {:news => news, :user => user, :comment => c}, :layout => false)
+  else
+    top_comment = ''
+  end
 
-    erb :show, :locals => {:title => entities(news['title']), :news => news, :comment => c, :top_comment => top_comment, :user => user }
-
-
-=begin
-    H.set_title "#{H.entities news["title"]} - #{SiteName}"
-    H.page {
-        H.section(:id => "newslist") {
-            news_to_html(news)
-        }+top_comment+
-        if $user
-            H.form(:name=>"f") {
-                H.inputhidden(:name => "news_id", :value => news["id"])+
-                H.inputhidden(:name => "comment_id", :value => -1)+
-                H.inputhidden(:name => "parent_id", :value => -1)+
-                H.textarea(:name => "comment", :cols => 60, :rows => 10) {}+H.br+
-                H.button(:name => "post_comment", :value => "Send comment")
-            }+H.div(:id => "errormsg"){}
-        else
-            H.br
-        end +
-        render_comments_for_news(news["id"])+
-        H.script() {'
-            $(function() {
-                $("input[name=post_comment]").click(post_comment);
-            });
-        '}
-    }
-=end
+  erb :show, :locals => {:title => entities(news['title']), :news => news, :comment => c, :top_comment => top_comment, :user => user }
 end
 
 get "/comment/:news_id/:comment_id" do
-    news = get_news_by_id(params["news_id"])
-    halt(404,"404 - This news does not exist.") if !news
-    comment = Comments.fetch(params["news_id"],params["comment_id"])
-    halt(404,"404 - This comment does not exist.") if !comment
-    H.page {
-        H.section(:id => "newslist") {
-            news_to_html(news)
-        }+
-        render_comment_subthread(comment, H.h2 {"Replies"})
-    }
+  news = get_news_by_id(params["news_id"])
+  halt(404,"404 - This news does not exist.") if !news
+  comment = Comments.fetch(params["news_id"],params["comment_id"])
+  halt(404,"404 - This comment does not exist.") if !comment
+  erb :comment_news, :locals => {:news => news, :comment => comment, :title => 'Comment'}
 end
 
 def render_comment_subthread(comment,sep="")
-    H.div(:class => "singlecomment") {
-        u = get_user_by_id(comment["user_id"]) || DeletedUser
-        comment_to_html(comment,u)
-    }+H.div(:class => "commentreplies") {
-        sep+
-        render_comments_for_news(comment['thread_id'],comment["id"].to_i)
-    }
+  user = get_user_by_id(comment["user_id"]) || DeletedUser
+  erb :single_comment, :locals => {:comment => comment, :user => user, :sep => sep}
 end
 
 get "/reply/:news_id/:comment_id" do
-    redirect "/login" if !$user
-    news = get_news_by_id(params["news_id"])
-    halt(404,"404 - This news does not exist.") if !news
-    comment = Comments.fetch(params["news_id"],params["comment_id"])
-    halt(404,"404 - This comment does not exist.") if !comment
-    user = get_user_by_id(comment["user_id"]) || DeletedUser
+  redirect "/login" if !$user
+  news = get_news_by_id(params["news_id"])
+  halt(404,"404 - This news does not exist.") if !news
+  comment = Comments.fetch(params["news_id"],params["comment_id"])
+  halt(404,"404 - This comment does not exist.") if !comment
+  user = get_user_by_id(comment["user_id"]) || DeletedUser
 
-    H.set_title "Reply to comment - #{SiteName}"
-    H.page {
-        news_to_html(news)+
-        comment_to_html(comment,user)+
-        H.form(:name=>"f") {
-            H.inputhidden(:name => "news_id", :value => news["id"])+
-            H.inputhidden(:name => "comment_id", :value => -1)+
-            H.inputhidden(:name => "parent_id", :value => params["comment_id"])+
-            H.textarea(:name => "comment", :cols => 60, :rows => 10) {}+H.br+
-            H.button(:name => "post_comment", :value => "Reply")
-        }+H.div(:id => "errormsg"){}+
-        H.script() {'
-            $(function() {
-                $("input[name=post_comment]").click(post_comment);
-            });
-        '}
-    }
+  erb :reply, :locals => {:news => news, :comment => comment, :user => user, :title => 'Reply to comment' }
 end
 
 get "/editcomment/:news_id/:comment_id" do
-    redirect "/login" if !$user
-    news = get_news_by_id(params["news_id"])
-    halt(404,"404 - This news does not exist.") if !news
-    comment = Comments.fetch(params["news_id"],params["comment_id"])
-    halt(404,"404 - This comment does not exist.") if !comment
-    user = get_user_by_id(comment["user_id"]) || DeletedUser
-    halt(500,"Permission denied.") if $user['id'].to_i != user['id'].to_i
+  redirect "/login" if !$user
+  news = get_news_by_id(params["news_id"])
+  halt(404,"404 - This news does not exist.") if !news
+  comment = Comments.fetch(params["news_id"],params["comment_id"])
+  halt(404,"404 - This comment does not exist.") if !comment
+  user = get_user_by_id(comment["user_id"]) || DeletedUser
+  halt(500,"Permission denied.") if $user['id'].to_i != user['id'].to_i
 
-    H.set_title "Edit comment - #{SiteName}"
-    H.page {
-        news_to_html(news)+
-        comment_to_html(comment,user)+
-        H.form(:name=>"f") {
-            H.inputhidden(:name => "news_id", :value => news["id"])+
-            H.inputhidden(:name => "comment_id",:value => params["comment_id"])+
-            H.inputhidden(:name => "parent_id", :value => -1)+
-            H.textarea(:name => "comment", :cols => 60, :rows => 10) {
-                H.entities comment['body']
-            }+H.br+
-            H.button(:name => "post_comment", :value => "Edit")
-        }+H.div(:id => "errormsg"){}+
-        H.note {
-            "Note: to remove the comment remove all the text and press Edit."
-        }+
-        H.script() {'
-            $(function() {
-                $("input[name=post_comment]").click(post_comment);
-            });
-        '}
-    }
+  erb :edit_comment, :locals => {:news => news, :comment => comment, :user => user, :title => 'Edit comment' }
 end
 
 get "/editnews/:news_id" do
-    redirect "/login" if !$user
-    news = get_news_by_id(params["news_id"])
-    halt(404,"404 - This news does not exist.") if !news
-    halt(500,"Permission denied.") if $user['id'].to_i != news['user_id'].to_i
+  redirect "/login" if !$user
+  news = get_news_by_id(params["news_id"])
+  halt(404,"404 - This news does not exist.") if !news
+  halt(500,"Permission denied.") if $user['id'].to_i != news['user_id'].to_i
 
-    if news_domain(news)
-        text = ""
-    else
-        text = news_text(news)
-        news['url'] = ""
-    end
-    H.set_title "Edit news - #{SiteName}"
-    H.page {
-        news_to_html(news)+
-        H.div(:id => "submitform") {
-            H.form(:name=>"f") {
-                H.inputhidden(:name => "news_id", :value => news['id'])+
-                H.label(:for => "title") {"title"}+
-                H.inputtext(:id => "title", :name => "title", :size => 80,
-                            :value => H.entities(news['title']))+H.br+
-                H.label(:for => "url") {"url"}+H.br+
-                H.inputtext(:id => "url", :name => "url", :size => 60,
-                            :value => H.entities(news['url']))+H.br+
-                "or if you don't have an url type some text"+
-                H.br+
-                H.label(:for => "text") {"text"}+
-                H.textarea(:id => "text", :name => "text", :cols => 60, :rows => 10) {
-                    H.entities(text)
-                }+H.br+
-                H.checkbox(:name => "del", :value => "1")+
-                "delete this news"+H.br+
-                H.button(:name => "edit_news", :value => "Edit")
-            }
-        }+
-        H.div(:id => "errormsg"){}+
-        H.script() {'
-            $(function() {
-                $("input[name=edit_news]").click(submit);
-            });
-        '}
-    }
+  if news_domain(news)
+      text = ""
+  else
+      text = news_text(news)
+      news['url'] = ""
+  end
+
+  erb :edit_news, :locals => {:news => news, :text => text, :title => 'Edit news'}
 end
 
 get "/user/:username" do
-    user = get_user_by_username(params[:username])
-    halt(404,"Non existing user") if !user
-    posted_news,posted_comments = $r.pipelined {
-        $r.zcard("user.posted:#{user['id']}")
-        $r.zcard("user.comments:#{user['id']}")
-    }
+  user = get_user_by_username(params[:username])
+  halt(404,"Non existing user") if !user
+  posted_news, posted_comments = $r.pipelined {
+    $r.zcard("user.posted:#{user['id']}")
+    $r.zcard("user.comments:#{user['id']}")
+  }
+  owner = $user && ($user['id'].to_i == user['id'].to_i)
+  erb :user, :locals => { :user => user, :owner => owner, :title => entities(user['username']),
+                          :posted_news => posted_news, :posted_comments => posted_comments }
+=begin
     H.set_title "#{H.entities user['username']} - #{SiteName}"
-    owner = $user && ($user['id'].to_i == user['id'].to_i)
     H.page {
         H.div(:class => "userinfo") {
             H.span(:class => "avatar") {
@@ -508,6 +325,7 @@ get "/user/:username" do
             '}
         else "" end
     }
+=end
 end
 
 ###############################################################################
@@ -682,8 +500,7 @@ post '/api/postcomment' do
     if (!check_params "news_id","comment_id","parent_id",:comment)
         return {
             :status => "err",
-            :error => "Missing news_id, comment_id, parent_id, or comment
-                       parameter."
+            :error => "Missing news_id, comment_id, parent_id, or comment parameter."
         }.to_json
     end
     info = insert_comment(params["news_id"].to_i,$user['id'],
@@ -844,69 +661,6 @@ def replies_link
         else "" end
     }
 end
-
-=begin
-def application_header
-    navitems = [    ["top","/"],
-                    ["latest","/latest/0"],
-                    ["submit","/submit"]]
-    navbar = H.nav {
-        navitems.map{|ni|
-            H.a(:href=>ni[1]) {H.entities ni[0]}
-        }.inject{|a,b| a+"\n"+b}+replies_link
-    }
-    rnavbar = H.nav(:id => "account") {
-        if $user
-            H.a(:href => "/user/"+H.urlencode($user['username'])) {
-                H.entities $user['username']+" (#{$user['karma']})"
-            }+" | "+
-            H.a(:href =>
-                "/logout?apisecret=#{$user['apisecret']}") {
-                "logout"
-            }
-        else
-            H.a(:href => "/login") {"login / register"}
-        end
-    }
-    H.header {
-        H.h1 {
-            H.a(:href => "/") {H.entities SiteName}+" "+
-            H.small {Version}
-        }+navbar+" "+rnavbar
-    }
-end
-=end
-
-=begin
-def application_footer
-    if $user
-        apisecret = H.script() {
-            "var apisecret = '#{$user['apisecret']}';";
-        }
-    else
-        apisecret = ""
-    end
-    if KeyboardNavigation == 1
-        keyboardnavigation = H.script() {
-            "setKeyboardNavigation();"
-        }
-    else
-        keyboardnavigation = ""
-    end
-    H.footer {
-        links = [
-            ["source code", "http://github.com/antirez/lamernews"],
-            ["rss feed", "/rss"],
-            ["twitter", FooterTwitterLink],
-            ["google group", FooterGoogleGroupLink]
-        ]
-        links.map{|l| l[1] ?
-            H.a(:href => l[1]) {H.entities l[0]} :
-            nil
-        }.select{|l| l}.join(" | ")
-    }+apisecret+keyboardnavigation
-end
-=end
 
 ################################################################################
 # User and authentication
@@ -1415,70 +1169,6 @@ def news_to_rss(news)
     }+"\n"
 end
 
-
-# Turn the news into its HTML representation, that is
-# a linked title with buttons to up/down vote plus additional info.
-# This function expects as input a news entry as obtained from
-# the get_news_by_id function.
-=begin
-def news_to_html(news)
-    return H.article(:class => "deleted") {
-        "[deleted news]"
-    } if news["del"]
-    domain = news_domain(news)
-    news = {}.merge(news) # Copy the object so we can modify it as we wish.
-    news["url"] = "/news/#{news["id"]}" if !domain
-    upclass = "uparrow"
-    downclass = "downarrow"
-    if news["voted"] == :up
-        upclass << " voted"
-        downclass << " disabled"
-    elsif news["voted"] == :down
-        downclass << " voted"
-        upclass << " disabled"
-    end
-    H.article("data-news-id" => news["id"]) {
-        H.a(:href => "#up", :class => upclass) {
-            "&#9650;"
-        }+" "+
-        H.h2 {
-            H.a(:href=>news["url"]) {
-                H.entities news["title"]
-            }
-        }+" "+
-        H.address {
-            if domain
-                "at "+H.entities(domain)
-            else "" end +
-            if ($user and $user['id'].to_i == news['user_id'].to_i and
-                news['ctime'].to_i > (Time.now.to_i - NewsEditTime))
-                " " + H.a(:href => "/editnews/#{news["id"]}") {
-                    "[edit]"
-                }
-            else "" end
-        }+
-        H.a(:href => "#down", :class =>  downclass) {
-            "&#9660;"
-        }+
-        H.p {
-            "#{news["up"]} up and #{news["down"]} down, posted by "+
-            H.username {
-                H.a(:href=>"/user/"+H.urlencode(news["username"])) {
-                    H.entities news["username"]
-                }
-            }+" "+str_elapsed(news["ctime"].to_i)+" "+
-            H.a(:href => "/news/#{news["id"]}") {
-                news["comments"]+" comments"
-            }
-        }+
-        if params and params[:debug] and $user and user_is_admin?($user)
-            "score: "+news["score"].to_s+" "+
-            "rank: "+compute_news_rank(news).to_s
-        else "" end
-    }+"\n"
-end
-=end
-
 # If 'news' is a list of news entries (Ruby hashes with the same fields of
 # the Redis hash representing the news in the DB) this function will render
 # the RSS needed to show this news.
@@ -1489,21 +1179,6 @@ def news_list_to_rss(news)
     }
     aux
 end
-
-# If 'news' is a list of news entries (Ruby hashes with the same fields of
-# the Redis hash representing the news in the DB) this function will render
-# the HTML needed to show this news.
-=begin
-def news_list_to_html(news)
-    H.section(:id => "newslist") {
-        aux = ""
-        news.each{|n|
-            aux << news_to_html(n)
-        }
-        aux
-    }
-end
-=end
 
 # Updating the rank would require some cron job and worker in theory as
 # it is time dependent and we don't want to do any sorting operation at
@@ -1685,9 +1360,7 @@ def insert_comment(news_id,user_id,comment_id,parent_id,body)
         comment_id = Comments.insert(news_id,comment)
         return false if !comment_id
         $r.hincrby("news:#{news_id}","comments",1);
-        $r.zadd("user.comments:#{user_id}",
-            Time.now.to_i,
-            news_id.to_s+"-"+comment_id.to_s);
+        $r.zadd("user.comments:#{user_id}", Time.now.to_i, news_id.to_s+"-"+comment_id.to_s);
         # increment_user_karma_by(user_id,KarmaIncrementComment)
         if p and $r.exists("user:#{p['user_id']}")
             $r.hincrby("user:#{p['user_id']}","replies",1)
@@ -1749,111 +1422,41 @@ def urls_to_links(s)
     }
 end
 
-# Render a comment into HTML.
-# 'c' is the comment representation as a Ruby hash.
-# 'u' is the user, obtained from the user_id by the caller.
-def comment_to_html(c,u)
-    indent = "margin-left:#{c['level'].to_i*CommentReplyShift}px"
-    score = compute_comment_score(c)
-    news_id = c['thread_id']
-
-    if c['del'] and c['del'].to_i == 1
-        return H.article(:style => indent,:class=>"commented deleted") {
-            "[comment deleted]"
-        }
-    end
-    show_edit_link = !c['topcomment'] &&
-                ($user && ($user['id'].to_i == c['user_id'].to_i)) &&
-                (c['ctime'].to_i > (Time.now.to_i - CommentEditTime))
-
-    comment_id = "#{news_id}-#{c['id']}"
-    H.article(:class => "comment", :style => indent,
-              "data-comment-id" => comment_id, :id => comment_id) {
-        H.span(:class => "avatar") {
-            email = u["email"] || ""
-            digest = Digest::MD5.hexdigest(email)
-            H.img(:src=>"http://gravatar.com/avatar/#{digest}?s=48&d=mm")
-        }+H.span(:class => "info") {
-            H.span(:class => "username") {
-                H.a(:href=>"/user/"+H.urlencode(u["username"])) {
-                    H.entities u["username"]
-                }
-            }+" "+str_elapsed(c["ctime"].to_i)+". "+
-            if !c['topcomment']
-                H.a(:href=>"/comment/#{news_id}/#{c["id"]}", :class=>"reply") {
-                    "link"
-                }+" "
-            else "" end +
-            if $user and !c['topcomment']
-                H.a(:href=>"/reply/#{news_id}/#{c["id"]}", :class=>"reply") {
-                    "reply"
-                }+" "
-            else " " end +
-            if !c['topcomment']
-                upclass = "uparrow"
-                downclass = "downarrow"
-                if $user and c['up'] and c['up'].index($user['id'].to_i)
-                    upclass << " voted"
-                    downclass << " disabled"
-                elsif $user and c['down'] and c['down'].index($user['id'].to_i)
-                    downclass << " voted"
-                    upclass << " disabled"
-                end
-                "#{score} points "+
-                H.a(:href => "#up", :class => upclass) {
-                    "&#9650;"
-                }+" "+
-                H.a(:href => "#down", :class => downclass) {
-                    "&#9660;"
-                }
-            else " " end +
-            if show_edit_link
-                H.a(:href=> "/editcomment/#{news_id}/#{c["id"]}",
-                    :class =>"reply") {"edit"}+
-                    " (#{
-                        (CommentEditTime - (Time.now.to_i-c['ctime'].to_i))/60
-                    } minutes left)"
-            else "" end
-        }+H.pre {
-            urls_to_links H.entities(c["body"].strip)
-        }
-    }
-end
-
 def render_comments_for_news(news_id,root=-1)
-    html = ""
-    user = {}
-    Comments.render_comments(news_id,root) {|c|
-        user[c["id"]] = get_user_by_id(c["user_id"]) if !user[c["id"]]
-        user[c["id"]] = DeletedUser if !user[c["id"]]
-        u = user[c["id"]]
-        html << comment_to_html(c,u)
-    }
-    H.div("id" => "comments") {html}
+  html = ""
+  user = {}
+  news = get_news_by_id(params["news_id"])
+  Comments.render_comments(news_id,root) {|c|
+      user[c["id"]] = get_user_by_id(c["user_id"]) if !user[c["id"]]
+      user[c["id"]] = DeletedUser if !user[c["id"]]
+      u = user[c["id"]]
+      html << erb( :comment, :locals => {:news => news, :comment => c, :user => user[c['id']], :layout => false})
+  }
+  html
 end
 
 def vote_comment(news_id,comment_id,user_id,vote_type)
-    user_id = user_id.to_i
-    comment = Comments.fetch(news_id,comment_id)
-    return false if !comment
-    varray = (comment[vote_type.to_s] or [])
-    return false if varray.index(user_id)
-    varray << user_id
-    return Comments.edit(news_id,comment_id,{vote_type.to_s => varray})
+  user_id = user_id.to_i
+  comment = Comments.fetch(news_id,comment_id)
+  return false if !comment
+  varray = (comment[vote_type.to_s] or [])
+  return false if varray.index(user_id)
+  varray << user_id
+  return Comments.edit(news_id,comment_id,{vote_type.to_s => varray})
 end
 
 # Get comments in chronological order for the specified user in the
 # specified range.
 def get_user_comments(user_id,start,count)
-    numitems = $r.zcard("user.comments:#{user_id}").to_i
-    ids = $r.zrevrange("user.comments:#{user_id}",start,start+(count-1))
-    comments = []
-    ids.each{|id|
-        news_id,comment_id = id.split('-')
-        comment = Comments.fetch(news_id,comment_id)
-        comments << comment if comment
-    }
-    [comments,numitems]
+  numitems = $r.zcard("user.comments:#{user_id}").to_i
+  ids = $r.zrevrange("user.comments:#{user_id}",start,start+(count-1))
+  comments = []
+  ids.each{|id|
+    news_id,comment_id = id.split('-')
+    comment = Comments.fetch(news_id,comment_id)
+    comments << comment if comment
+  }
+  [comments,numitems]
 end
 
 ###############################################################################

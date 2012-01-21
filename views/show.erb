@@ -11,9 +11,7 @@
     <button class="submit" type="submit" name="post_comment">post comment</button>
   </form>
 <% end %>
-<div id="comments">
-  <%= erb( :comments, :locals => {:news => news, :comment => comment, :user => user}) if comment %>
-</div>
+<%= erb( :comments, :locals => {:news => news, :comment => comment, :user => user, :root => -1}) %>
 <script>
   NIP.init.push('postcomment');
 </script>

@@ -1,0 +1,35 @@
+<section class="userinfo">
+  <span class="avatar">
+    <img src="<%= gravatar_url(user) %>">
+  </span>
+  <h1 class="username"><%= entities(user['username']) %></h1>
+  <pre class="about">
+  <%= user['about'] %>
+  </pre>
+  <ul class="meta-data">
+    <li>created <%= "#{(Time.now.to_i-user['ctime'].to_i)/(3600*24)} days ago" %></li>
+    <li>karma <%= user['karma'] %> points</li>
+    <li>posted news <%= posted_news.to_s %></li>
+    <li>posted comments <%= posted_comments.to_s %></li>
+    <% if owner %>
+    <li><a href="/saved/0">saved news</a></li>
+    <% end %>
+    <li><a href="/usercomments/<%= urlencode(user['username']) %>/0">user comments</a></li>
+  </ul>
+</section>
+<% if owner %>
+  <form id="profileform" class="form" name="f">
+    <label class="labelform" for="email">email (not visible, used for gravatar)</label>
+    <input class="textfield" type="text" id="email" name="email" size="40" value="<%= entities(user['email']) %>">
+    <label class="labelform" for="password">change password (optional)</label>
+    <input class="textfield" type="password" name="password" size="40">
+    <label class="labelform" for="about">about</label>
+    <textarea id="about" class="textarea" name="about" cols="60" rows="10"><%= entities(user['about']) %></textarea>
+
+    <div id="errormsg"></div>
+    <button class="submit" type="submit">update profile</button>
+  <form>
+<% end %>
+<script>
+  NIP.init.push('updateprofile');
+</script>

@@ -1,0 +1,15 @@
+
+<%= erb :news, :locals => {:news => news}, :layout => false %>
+<%= erb :comment, :locals => {:comment => comment, :user => user, :layout => false} %>
+
+<form id="commentform" class="form" name="f">
+  <input type="hidden" name="news_id" value="<%= news['id'] %>">
+  <input type="hidden" name="comment_id" value="<%= -1 %>">
+  <input type="hidden" name="parent_id" value="<%= params['comment_id'] %>">
+  <textarea name="comment" cols="60" rows="10"></textarea>
+  <div id="errormsg"></div>
+  <button class="submit" type="submit" name="post_comment">reply</button"
+</form>
+<script>
+  NIP.init.push('postcomment')
+</script>

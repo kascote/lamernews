@@ -91,6 +91,7 @@ td { vertical-align: top; }
 .header .account                              { position: absolute; top: 30px; right: 20px; font-size: 18px; }
 .footer                                       { margin-top: 50px; border-top: 5px double #ddd; text-align: center; padding: 20px 0; }
 #login                                        { margin: 20px 0; }
+#profileform,
 #loginform                                    { width: 300px; }
 #submitnews                                   { width: 400px; }
 .form .textarea,
@@ -104,6 +105,13 @@ td { vertical-align: top; }
 .comment .info                                { position: relative; left: 60px; font-size: 14px; color: #999; }
 .comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }
 #errormsg                                     { width: 400px; color: #F00; font-weight: normal; margin-top: 15px; }
+.userinfo .avatar img                         { width: 48px; height: 48px; }
+.userinfo .username                           { position: relative; left: 15px; display: inline; font-size: 28px; color: #444; font-weight: normal; }
+.userinfo .about                              { color: #666; font-style: italic; margin: 20px; }
+.userinfo .meta-data                          { font-size: 14px; list-style: none; padding: 0; margin-bottom: 30px; }
+
+
+
 
 
 
