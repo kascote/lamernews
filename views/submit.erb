@@ -2,9 +2,9 @@
   <form id="submitnews" class="form" name="f">
 
     <label class="labelform" for="title">title</label>
-    <input class="textfield" type="text" id="title" name="title" size="80" value="<%= '' %>">
+    <input class="textfield" type="text" id="title" name="title" size="80" value="<%= params['t'] ? entities(params['t']) : '' %>">
     <label class="labelform" for="url">url</label>
-    <input class="textfield" type="text" id="url" name="url" size="60" value="<%= '' %>">
+    <input class="textfield" type="text" id="url" name="url" size="60" value="<%= params['u'] ? entities(params['u']) : '' %>">
 
     <p class="info">or if you don't have an url type some text</p>
 

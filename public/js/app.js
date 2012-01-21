@@ -4,6 +4,7 @@ function login() {
         password: $("input[name=password]").val(),
     };
     var register = $("input[name=register]").attr("checked");
+    $("#errormsg").html('')
     $.ajax({
         type: register ? "POST" : "GET",
         url: register ? "/api/create_account" : "/api/login",
