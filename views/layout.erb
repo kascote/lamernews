@@ -31,7 +31,10 @@
         <a class="link-nav" href="/">top</a>
         <a class="link-nav" href="/latest/0">latest</a>
         <a class="link-nav" href="/submit">submit</a>
-        <a class="link-nav" href="/replies">replies</a>
+        <% if is_logged_in? %>
+          <% count = $user['replies'] || 0 %>
+          <a class="link-nav" href="/replies">replies <%= count.to_i > 0 ? "<sup>#{count}</sup>" : "" %></a>
+        <% end %>
       </nav>
       <nav class="account">
       <% if is_logged_in? %>

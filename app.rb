@@ -73,20 +73,8 @@ end
 get '/rss' do
     content_type 'text/xml', :charset => 'utf-8'
     news,count = get_latest_news
-    H.rss(:version => "2.0", "xmlns:atom" => "http://www.w3.org/2005/Atom") {
-        H.channel {
-            H.title {
-                "#{SiteName}"
-            } + " " +
-            H.link {
-                "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
-            } + " " +
-            H.description {
-                "Description pending"
-            } + " " +
-            news_list_to_rss(news)
-        }
-    }
+
+    erb :rss, :layout => false, :locals => {:news => news, :count => count}
 end
 
 get '/latest' do
@@ -560,25 +548,6 @@ def check_api_secret
     params["apisecret"] and (params["apisecret"] == $user["apisecret"])
 end
 
-###############################################################################
-# Navigation, header and footer.
-###############################################################################
-
-# Return the HTML for the 'replies' link in the main navigation bar.
-# The link is not shown at all if the user is not logged in, while
-# it is shown with a badge showing the number of replies for logged in
-# users.
-def replies_link
-    return "" if !$user
-    count = $user['replies'] || 0
-    H.a(:href => "/replies", :class => "replies") {
-        "replies"+
-        if count.to_i > 0
-            H.sup {count}
-        else "" end
-    }
-end
-
 ################################################################################
 # User and authentication
 ################################################################################
@@ -751,7 +720,7 @@ def user_add_flags(user_id,flags)
         newflags << flag if not user_has_flags?(user,flag)
     }
     # Note: race condition here if somebody touched the same field
-    # at the same time: very unlkely and not critical so not using WATCH.
+    # at the same time: very unlkely and not critical so not using WATCH
     $r.hset("user:#{user['id']}","flags",newflags)
     true
 end
@@ -1053,48 +1022,6 @@ end
 def news_text(news)
     su = news["url"].split("/")
     (su[0] == "text:") ? news["url"][7..-1] : nil
-end
-
-# Turn the news into its RSS representation
-# This function expects as input a news entry as obtained from
-# the get_news_by_id function.
-def news_to_rss(news)
-    domain = news_domain(news)
-    news = {}.merge(news) # Copy the object so we can modify it as we wish.
-    news["ln_url"] = "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}/news/#{news["id"]}"
-    news["url"] = news["ln_url"] if !domain
-
-    H.item {
-        H.title {
-            H.entities news["title"]
-        } + " " +
-        H.guid {
-            H.entities news["url"]
-        } + " " +
-        H.link {
-            H.entities news["url"]
-        } + " " +
-        H.description {
-            "<![CDATA[" +
-            H.a(:href=>news["ln_url"]) {
-                "Comments"
-            } + "]]>"
-        } + " " +
-        H.comments {
-            H.entities news["ln_url"]
-        }
-    }+"\n"
-end
-
-# If 'news' is a list of news entries (Ruby hashes with the same fields of
-# the Redis hash representing the news in the DB) this function will render
-# the RSS needed to show this news.
-def news_list_to_rss(news)
-    aux = ""
-    news.each{|n|
-        aux << news_to_rss(n)
-    }
-    aux
 end
 
 # Updating the rank would require some cron job and worker in theory as
@@ -1399,41 +1326,7 @@ def rate_limit_by_ip(delay,*tags)
     return false
 end
 
-# Show list of items with show-more style pagination.
-#
-# The function sole argument is an hash with the following fields:
-#
-# :get     A function accepinng start/count that will return two values:
-#          1) A list of elements to paginate.
-#          2) The total amount of items of this type.
-#
-# :render  A function that given an element obtained with :get will turn
-#          in into a suitable representation (usually HTML).
-#
-# :start   The current start (probably obtained from URL).
-#
-# :perpage Number of items to show per page.
-#
-# :link    A string that is used to obtain the url of the [more] link
-#          replacing '$' with the right value for the next page.
-#
-# Return value: the current page rendering.
-def list_items(o)
-    aux = ""
-    o[:start] = 0 if o[:start] < 0
-    items,count = o[:get].call(o[:start],o[:perpage])
-    items.each{|n|
-        aux << o[:render].call(n)
-    }
-    last_displayed = o[:start]+o[:perpage]
-    if last_displayed < count
-        nextpage = o[:link].sub("$",
-                   (o[:start]+o[:perpage]).to_s)
-        aux << H.a(:href => nextpage,:class=> "more") {"[more]"}
-    end
-    aux
-end
-
+# build the bookmarlet
 def get_bookmarlet
   "javascript:window.location=%22#{SiteUrl}/submit?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)"
 end
