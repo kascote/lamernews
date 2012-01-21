@@ -109,65 +109,39 @@ end
 get '/saved/:start' do
     redirect "/login" if !$user
     start = params[:start].to_i
-    H.set_title "Saved news - #{SiteName}"
-    paginate = {
-        :get => Proc.new {|start,count|
-            get_saved_news($user['id'],start,count)
-        },
-        :render => Proc.new {|item| news_to_html(item)},
-        :start => start,
-        :perpage => SavedNewsPerPage,
-        :link => "/saved/$"
-    }
-    H.page {
-        H.h2 {"Your saved news"}+
-        H.section(:id => "newslist") {
-            list_items(paginate)
-        }
-    }
+    news,numitems = get_saved_news($user['id'],start,50)
+
+    pager = -1
+    if (start+50) < numitems
+      pager = start+50
+    end
+
+    erb :saved_news, :locals => {:title => 'your saved news', :news => news, :pager => pager}
 end
 
 get '/usercomments/:username/:start' do
     start = params[:start].to_i
     user = get_user_by_username(params[:username])
     halt(404,"Non existing user") if !user
+    comments, numitems = get_user_comments(user['id'],start,50)
 
-    H.set_title "#{H.entities user['username']} comments - #{SiteName}"
-    paginate = {
-        :get => Proc.new {|start,count|
-            get_user_comments(user['id'],start,count)
-        },
-        :render => Proc.new {|comment|
-            u = get_user_by_id(comment["user_id"]) || DeletedUser
-            comment_to_html(comment,u)
-        },
-        :start => start,
-        :perpage => UserCommentsPerPage,
-        :link => "/usercomments/#{H.urlencode user['username']}/$"
-    }
-    H.page {
-        H.h2 {"#{H.entities user['username']} comments"}+
-        H.div("id" => "comments") {
-            list_items(paginate)
-        }
-    }
+    pager = -1
+    if (start+50) < numitems
+      pager = start+50
+    end
+
+    erb :usercomments, :locals => {:title => "#{entities(user['username'])} comments",
+                                   :comments => comments,
+                                   :user => user,
+                                   :pager => pager
+                                  }
+
 end
 
 get '/replies' do
     redirect "/login" if !$user
     comments,count = get_user_comments($user['id'],0,SubthreadsInRepliesPage)
-    H.set_title "Your threads - #{SiteName}"
-    H.page {
-        $r.hset("user:#{$user['id']}","replies",0)
-        H.h2 {"Your threads"}+
-        H.div("id" => "comments") {
-            aux = ""
-            comments.each{|c|
-                aux << render_comment_subthread(c)
-            }
-            aux
-        }
-    }
+    erb :replies, :locals => {:comments => comments, :title =>'your threads'}
 end
 
 get '/login' do
@@ -269,63 +243,6 @@ get "/user/:username" do
   owner = $user && ($user['id'].to_i == user['id'].to_i)
   erb :user, :locals => { :user => user, :owner => owner, :title => entities(user['username']),
                           :posted_news => posted_news, :posted_comments => posted_comments }
-=begin
-    H.set_title "#{H.entities user['username']} - #{SiteName}"
-    H.page {
-        H.div(:class => "userinfo") {
-            H.span(:class => "avatar") {
-                email = user["email"] || ""
-                digest = Digest::MD5.hexdigest(email)
-                H.img(:src=>"http://gravatar.com/avatar/#{digest}?s=48&d=mm")
-            }+" "+
-            H.h2 {H.entities user['username']}+
-            H.pre {
-                H.entities user['about']
-            }+
-            H.ul {
-                H.li {
-                    H.b {"created "}+
-                    "#{(Time.now.to_i-user['ctime'].to_i)/(3600*24)} days ago"
-                }+
-                H.li {H.b {"karma "}+ "#{user['karma']} points"}+
-                H.li {H.b {"posted news "}+posted_news.to_s}+
-                H.li {H.b {"posted comments "}+posted_comments.to_s}+
-                if owner
-                    H.li {H.a(:href=>"/saved/0") {"saved news"}}
-                else "" end+
-                H.li {
-                    H.a(:href=>"/usercomments/"+H.urlencode(user['username'])+
-                               "/0") {
-                        "user comments"
-                    }
-                }
-            }
-        }+if owner
-            H.br+H.form(:name=>"f") {
-                H.label(:for => "email") {
-                    "email (not visible, used for gravatar)"
-                }+H.br+
-                H.inputtext(:id => "email", :name => "email", :size => 40,
-                            :value => H.entities(user['email']))+H.br+
-                H.label(:for => "password") {
-                    "change password (optional)"
-                }+H.br+
-                H.inputpass(:name => "password", :size => 40)+H.br+
-                H.label(:for => "about") {"about"}+H.br+
-                H.textarea(:id => "about", :name => "about", :cols => 60, :rows => 10){
-                    H.entities(user['about'])
-                }+H.br+
-                H.button(:name => "update_profile", :value => "Update profile")
-            }+
-            H.div(:id => "errormsg"){}+
-            H.script() {'
-                $(function() {
-                    $("input[name=update_profile]").click(update_profile);
-                });
-            '}
-        else "" end
-    }
-=end
 end
 
 ###############################################################################

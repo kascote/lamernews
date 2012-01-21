@@ -1,0 +1,10 @@
+<h2 class="page-title"><%= entities("#{user['username']}'s comments") %></h2>
+<div id="comments">
+<% comments.each do |c| %>
+  <%= erb :comment, :locals => {:layout => false, :comment => c, :user => user} %>
+<% end %>
+</div>
+
+<% if (pager > 0) %>
+  <a rel="next" href="/usercomments/<%= "#{params['username']}/#{pager}" %>">[more]</a>
+<% end %>

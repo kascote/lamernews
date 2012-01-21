@@ -1,0 +1,9 @@
+<section id="newslist">
+  <% news.each do |n| %>
+    <%= erb :news, :locals => {:layout => false, :news => n} %>
+  <% end %>
+</section>
+
+<% if (pager > 0) %>
+  <a rel="next" href="/saved/<%= pager %>">[more]</a>
+<% end %>

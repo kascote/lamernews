@@ -1,4 +1,4 @@
 <section id="newslist">
 <%= erb :news, :locals => {:news => news}, :layout => false %>
 </section>
-<%= render_comment_subthread(comment, '<h2>Replies</h2>') %>
+<%= render_comment_subthread(comment, '<h2 class="title">Replies</h2>') %>

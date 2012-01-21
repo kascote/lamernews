@@ -1,0 +1,2 @@
+- check that can't submit blank comments
+

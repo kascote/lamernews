@@ -1,5 +1,5 @@
       <article class="news-article" data-news-id="<%= news['id'] %>">
-        <a href="#up" class="uparrow <%= get_arrow_class(news['voted'], :up) %>">&#9650;</a>
+        <a href="#up" title="vote up" class="uparrow <%= get_arrow_class(news['voted'], :up) %>">&#9650;</a>
         <h1 class="news-title"><a href="<%= news_url(news) %>"><%= entities(news['title']) %></a></h1>
         <address class="domain">
           <%= get_domain(news) %>
@@ -7,7 +7,7 @@
             <a href="/editnews/<%= news['id'] %>">[edit]</a>
           <% end %>
         </address>
-        <a href="#down" class="downarrow <%= get_arrow_class(news['voted'], :down) %>">&#9660;</a>
+        <a href="#down" title="vote down" class="downarrow <%= get_arrow_class(news['voted'], :down) %>">&#9660;</a>
         <p class="meta-data">
           <%= "#{news["up"]} up and #{news["down"]} down, posted by " %>
           <username>

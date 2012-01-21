@@ -1,0 +1,10 @@
+<h2 class="page-title"><span class="bck">your threads</span></h2>
+<div id="comments">
+  <% comments.each do |c| %>
+    <% if c['del'] || (c['del'].to_i == 1) %>
+      <article class="comment deleted">[comment deleted]</article>
+    <% else %>
+      <%= render_comment_subthread(c) %>
+    <% end %>
+  <% end %>
+</div>

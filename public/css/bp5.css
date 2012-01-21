@@ -2,15 +2,13 @@
  * ==|== normalize ==========================================================
  */
 
-@import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow);
-
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
 audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
 audio:not([controls]) { display: none; }
 [hidden] { display: none; }
 
 html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-body { margin: 0; font-size: 13px; line-height: 1.231; font-family: "PT Sans Narrow", "Helvetica Neue", "Helvetica", sans-serif; }
+body { margin: 0; font-size: 14px; line-height: 1.231; font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif; }
 body, button, input, select, textarea { color: #444; }
 
 ::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
@@ -68,27 +66,28 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
-#main                                         { margin-left: 30px; }
-.page-title                                   { font-weight: normal; }
+#main                                         { margin: 20px 0 0 30px; }
 .news-title                                   { display: inline; font-size: 22px; line-height: 40px; font-weight: normal; }
 .news-article                                 { margin: 20px 0; }
 .news-article .domain                         { display: inline; font-style: normal; color: #999; }
 .news-article .meta-data                      { margin: 0 0 0 30px; color: #999; }
-.news-article .downarrow,
-.news-article .uparrow                        { color: #999; margin: 0 5px; }
-.news-article .downarrow.disabled,
-.news-article .uparrow.disabled               { visibility: hidden; }
-.news-article .downarrow.voted,
-.news-article .uparrow.voted                  { color: #9d9; }
+.downarrow,
+.uparrow                                      { color: #999; margin: 0 5px; }
+.downarrow.disabled,
+.uparrow.disabled                             { visibility: hidden; }
+.downarrow.voted,
+.uparrow.voted                                { color: #9d9; }
+.downarrow:hover,
+.uparrow:hover                                { color: #f00; text-decoration: none; }
 .lnk:hover,
 .lnk:visited,
 .lnk                                          { color: #444; }
 .header                                       { padding: 10px 0; height: 50px; border-bottom: 5px double #ddd; }
 .header .logo                                 { font-weight: normal; color: #000; display: inline; margin: 30px; font-size: 38px; }
-.header .menu                                 { display: inline; padding: 0 30px; }
+.header .menu                                 { display: inline; padding: 0 10px; }
 .header .link-nav:visited,
-.header .link-nav                             { color: #666; padding: 0 10px; font-size: 18px}
-.header .account                              { position: absolute; top: 30px; right: 20px; font-size: 18px; }
+.header .link-nav                             { color: #666; padding: 0 10px; }
+.header .account                              { position: absolute; top: 30px; right: 20px; }
 .footer                                       { margin-top: 50px; border-top: 5px double #ddd; text-align: center; padding: 20px 0; }
 #login                                        { margin: 20px 0; }
 #profileform,
@@ -97,18 +96,28 @@ td { vertical-align: top; }
 .form .textarea,
 .form .textfield                              { width: 300px; height: 20px; font-size: 16px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
 .form .labelform                              { font-size: 16px; }
-.form .submit                                 { display: block; margin: 20px 0; padding: 5px 20px; }
+.form .submit                                 { display: block; padding: 5px 20px; }
 .form .textarea                               { width: 400px; height: 100px; }
 #submitnews .textfield                        { width: 400px !important; }
-.comment                                      { position: relative; width: 500px; display: block; margin-bottom: 40px; min-height: 50px; }
+#comments                                     { margin-top: 50px; }
+.comment                                      { position: relative; width: 800px; display: block; min-height: 50px; margin-bottom: 40px;}
 .comment .avatar                              { position: absolute; top: 0px; left: 0px; width: 48px; height: 48px; }
 .comment .info                                { position: relative; left: 60px; font-size: 14px; color: #999; }
-.comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; }
+.comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier, monospace; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; margin: 0}
 #errormsg                                     { width: 400px; color: #F00; font-weight: normal; margin-top: 15px; }
 .userinfo .avatar img                         { width: 48px; height: 48px; }
 .userinfo .username                           { position: relative; left: 15px; display: inline; font-size: 28px; color: #444; font-weight: normal; }
 .userinfo .about                              { color: #666; font-style: italic; margin: 20px; }
-.userinfo .meta-data                          { font-size: 14px; list-style: none; padding: 0; margin-bottom: 30px; }
+.userinfo .meta-data                          { list-style: none; padding: 0; margin-bottom: 30px; }
+.bck                                          { background-color: #ffa; padding: 3px; }
+.commentreplies                               { margin: 0 30px 50px 50px;}
+.commentreplies .title                        { font-weight: normal; border-bottom: 1px solid #999; }
+.commentreplies .comment                      { margin-bottom: 50px; }
+.comment.deleted                              { margin-bottom: 10px !important; min-height: 20px !important; margin-left: 10px; }
+.page-title                                   { font-weight: normal; }
+.singlecomment                                { background-color: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 10px; }
+.singlecomment .comment                       { margin-bottom: 0px !important; }
+
 
 
 

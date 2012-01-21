@@ -1,7 +1,10 @@
-<div class="singlecomment">
+<div class="singlecomment clearfix">
   <%= erb :comment, :locals => {:comment => comment, :user => user, :layout => false} %>
 </div>
-<%= sep %>
-<div class="commentreplies">
-  <%= render_comments_for_news(comment['thread_id'], comment['id'].to_i) %>
+<% cn = render_comments_for_news(comment['thread_id'], comment['id'].to_i) %>
+<% if cn != "" %>
+<div class="commentreplies clearfix">
+  <%= sep %>
+  <%= cn %>
 </div>
+<% end %>

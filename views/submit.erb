@@ -11,14 +11,13 @@
     <label class="labelform" for="text">text</label>
     <textarea class="textarea" id="text" name="text" cols="60" rows="10"></textarea>
 
-    <div id="errormsg"></div>
-
     <button class="submit" type="submit">submit</button>
 
+    <div id="errormsg"></div>
     <input type="hidden" name="news_id" value="-1">
   </form>
 </section>
-<p class="note">Submitting news is simple using the <a href="<%= get_bookmarlet %>">bookmarklet</a> (drag the link to your browse toolbar)</p>
+<p class="note"><span class="bck">Submitting news is simple using the <a href="<%= get_bookmarlet %>">bookmarklet</a> (drag the link to your browse toolbar)</span></p>
 <script>
   NIP.init.push('submitnews');
 </script>
