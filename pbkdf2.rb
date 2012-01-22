@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # Modified by Salvatore Sanfilippo to only support HMAC-SHA1 from
 # ruby-hmac gem in order to drop the openssl dependency.
 #

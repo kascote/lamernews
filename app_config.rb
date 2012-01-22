@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # General
 SiteName = "Nerds in Press"
 SiteUrl = "http://nerdsinpress.com"
