@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # Copyright 2011 Salvatore Sanfilippo. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -91,7 +92,7 @@ get '/latest/:start' do
     pager = start+50
   end
 
-  erb :index, :locals => {:news => news, :pager => pager, :title => 'Latest News'}
+  erb :index, :locals => {:news => news, :pager => pager, :title => 'Últimas Noticias'}
 end
 
 get '/saved/:start' do
@@ -104,13 +105,13 @@ get '/saved/:start' do
       pager = start+50
     end
 
-    erb :saved_news, :locals => {:title => 'your saved news', :news => news, :pager => pager}
+    erb :saved_news, :locals => {:title => 'Noticias Guardadas', :news => news, :pager => pager}
 end
 
 get '/usercomments/:username/:start' do
     start = params[:start].to_i
     user = get_user_by_username(params[:username])
-    halt(404,"Non existing user") if !user
+    halt(404,"El usuario no existe") if !user
     comments, numitems = get_user_comments(user['id'],start,50)
 
     pager = -1
@@ -118,7 +119,7 @@ get '/usercomments/:username/:start' do
       pager = start+50
     end
 
-    erb :usercomments, :locals => {:title => "#{entities(user['username'])} comments",
+    erb :usercomments, :locals => {:title => "#{entities(user['username'])} comentarios",
                                    :comments => comments,
                                    :user => user,
                                    :pager => pager
@@ -133,12 +134,12 @@ get '/replies' do
 end
 
 get '/login' do
-  erb :login, :locals => {:title => 'Sign In Form'}
+  erb :login, :locals => {:title => 'Formulario de Ingreso'}
 end
 
 get '/submit' do
   redirect "/login" if !$user
-  erb :submit, :locals => {:title => 'Submit News'}
+  erb :submit, :locals => {:title => 'Enviar Noticias'}
 end
 
 get '/logout' do
@@ -150,7 +151,7 @@ end
 
 get "/news/:news_id" do
   news = get_news_by_id(params["news_id"])
-  halt(404,"404 - This news does not exist.") if !news
+  halt(404,"404 - Esta noticias no existe.") if !news
   # Show the news text if it is a news without URL.
   if !news_domain(news)
       c = {
@@ -171,9 +172,9 @@ end
 
 get "/comment/:news_id/:comment_id" do
   news = get_news_by_id(params["news_id"])
-  halt(404,"404 - This news does not exist.") if !news
+  halt(404,"404 - Esta noticia no existe.") if !news
   comment = Comments.fetch(params["news_id"],params["comment_id"])
-  halt(404,"404 - This comment does not exist.") if !comment
+  halt(404,"404 - Este comentario no existe.") if !comment
   erb :comment_news, :locals => {:news => news, :comment => comment, :title => 'Comment'}
 end
 
@@ -185,31 +186,31 @@ end
 get "/reply/:news_id/:comment_id" do
   redirect "/login" if !$user
   news = get_news_by_id(params["news_id"])
-  halt(404,"404 - This news does not exist.") if !news
+  halt(404,"404 - Esta noticia no existe.") if !news
   comment = Comments.fetch(params["news_id"],params["comment_id"])
-  halt(404,"404 - This comment does not exist.") if !comment
+  halt(404,"404 - Este comentario no existe.") if !comment
   user = get_user_by_id(comment["user_id"]) || DeletedUser
 
-  erb :reply, :locals => {:news => news, :comment => comment, :user => user, :title => 'Reply to comment' }
+  erb :reply, :locals => {:news => news, :comment => comment, :user => user, :title => 'Responder al comentario' }
 end
 
 get "/editcomment/:news_id/:comment_id" do
   redirect "/login" if !$user
   news = get_news_by_id(params["news_id"])
-  halt(404,"404 - This news does not exist.") if !news
+  halt(404,"404 - Esta noticia no existe.") if !news
   comment = Comments.fetch(params["news_id"],params["comment_id"])
-  halt(404,"404 - This comment does not exist.") if !comment
+  halt(404,"404 - Este comentario no existe.") if !comment
   user = get_user_by_id(comment["user_id"]) || DeletedUser
-  halt(500,"Permission denied.") if $user['id'].to_i != user['id'].to_i
+  halt(500,"Permiso denegado.") if $user['id'].to_i != user['id'].to_i
 
-  erb :edit_comment, :locals => {:news => news, :comment => comment, :user => user, :title => 'Edit comment' }
+  erb :edit_comment, :locals => {:news => news, :comment => comment, :user => user, :title => 'Editar comentario' }
 end
 
 get "/editnews/:news_id" do
   redirect "/login" if !$user
   news = get_news_by_id(params["news_id"])
-  halt(404,"404 - This news does not exist.") if !news
-  halt(500,"Permission denied.") if $user['id'].to_i != news['user_id'].to_i
+  halt(404,"404 - Esta noticia no existe.") if !news
+  halt(500,"Permiso denegado.") if $user['id'].to_i != news['user_id'].to_i
 
   if news_domain(news)
       text = ""
@@ -218,12 +219,12 @@ get "/editnews/:news_id" do
       news['url'] = ""
   end
 
-  erb :edit_news, :locals => {:news => news, :text => text, :title => 'Edit news'}
+  erb :edit_news, :locals => {:news => news, :text => text, :title => 'Editar Noticia'}
 end
 
 get "/user/:username" do
   user = get_user_by_username(params[:username])
-  halt(404,"Non existing user") if !user
+  halt(404,"El usuario no existe") if !user
   posted_news, posted_comments = $r.pipelined {
     $r.zcard("user.posted:#{user['id']}")
     $r.zcard("user.comments:#{user['id']}")
@@ -245,7 +246,7 @@ post '/api/logout' do
     else
         return {
             :status => "err",
-            :error => "Wrong auth credentials or API secret."
+            :error => "Credenciales erroneas o códig de API inválido."
         }.to_json
     end
 end
@@ -255,7 +256,7 @@ get '/api/login' do
     if (!check_params "username","password")
         return {
             :status => "err",
-            :error => "Username and password are two required fields."
+            :error => "Se debe ingrear un usuario y clave."
         }.to_json
     end
     auth,apisecret = check_user_credentials(params[:username], params[:password])
@@ -268,7 +269,7 @@ get '/api/login' do
     else
         return {
             :status => "err",
-            :error => "No match for the specified username / password pair."
+            :error => "No concuardan el nombre de usuario y clave."
         }.to_json
     end
 end
@@ -278,13 +279,13 @@ post '/api/create_account' do
     if (!check_params "username","password")
         return {
             :status => "err",
-            :error => "Username and password are two required fields."
+            :error => "Se debe ingrear un usuario y clave."
         }.to_json
     end
     if params[:password].length < PasswordMinLength
         return {
             :status => "err",
-            :error => "Password is too short. Min length: #{PasswordMinLength}"
+            :error => "La clave es muy corta. Longitud mínima: #{PasswordMinLength}"
         }.to_json
     end
     auth,errmsg = create_user(params[:username],params[:password])
@@ -300,9 +301,9 @@ end
 
 post '/api/submit' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado."}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "Error de clave en el formulario."}.to_json
     end
 
     # We can have an empty url or an empty first comment, but not both.
@@ -311,7 +312,7 @@ post '/api/submit' do
                                 params[:text].length == 0)
         return {
             :status => "err",
-            :error => "Please specify a news title and address or text."
+            :error => "Por favor ingrese un Título y una URL o un texto."
         }.to_json
     end
     # Make sure the URL is about an acceptable protocol, that is
@@ -321,7 +322,7 @@ post '/api/submit' do
            params[:url].index("https://") != 0
             return {
                 :status => "err",
-                :error => "We only accept http:// and https:// news."
+                :error => "Solo se aceptan URL con http:// o https://"
             }.to_json
         end
     end
@@ -329,8 +330,8 @@ post '/api/submit' do
         if submitted_recently
             return {
                 :status => "err",
-                :error => "You have submitted a story too recently, "+
-                "please wait #{allowed_to_post_in_seconds} seconds."
+                :error => "Ya envió una noticia recientemente, "+
+                "por favor espere #{allowed_to_post_in_seconds} segundos."
             }.to_json
         end
         news_id = insert_news(params[:title],params[:url],params[:text],
@@ -341,8 +342,7 @@ post '/api/submit' do
         if !news_id
             return {
                 :status => "err",
-                :error => "Invalid parameters, news too old to be modified "+
-                          "or url recently posted."
+                :error => "Parámetors inválidos, la noticias es muy vieja para ser modificada o la URL de la noticias ya fue compartida"
             }.to_json
         end
     end
@@ -354,34 +354,34 @@ end
 
 post '/api/delnews' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado."}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "API secret error."}.to_json
     end
     if (!check_params "news_id")
         return {
             :status => "err",
-            :error => "Please specify a news title."
+            :error => "Por favor ingreso un título."
         }.to_json
     end
     if del_news(params[:news_id],$user["id"])
         return {:status => "ok", :news_id => -1}.to_json
     end
-    return {:status => "err", :error => "News too old or wrong ID/owner."}.to_json
+    return {:status => "err", :error => "Noticias muy vieja o ID erroneo"}.to_json
 end
 
 post '/api/votenews' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado."}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "API secret error."}.to_json
     end
     # Params sanity check
     if (!check_params "news_id","vote_type") or (params["vote_type"] != "up" and
                                                  params["vote_type"] != "down")
         return {
             :status => "err",
-            :error => "Missing news ID or invalid vote type."
+            :error => "No se encontró el ID de la noticias o tipo de voto inválido."
         }.to_json
     end
     # Vote the news
@@ -397,9 +397,9 @@ end
 
 post '/api/postcomment' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado."}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "API secret error."}.to_json
     end
     # Params sanity check
     if (!check_params "news_id","comment_id","parent_id",:comment)
@@ -413,7 +413,7 @@ post '/api/postcomment' do
                           params["parent_id"].to_i,params["comment"])
     return {
         :status => "err",
-        :error => "Invalid news, comment, or edit time expired."
+        :error => "Noticia inválida, comentario o tiempo de edición expirado."
     }.to_json if !info
     return {
         :status => "ok",
@@ -426,19 +426,19 @@ end
 
 post '/api/updateprofile' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado"}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "API secret error"}.to_json
     end
     if !check_params(:about, :email, :password)
-        return {:status => "err", :error => "Missing parameters."}.to_json
+        return {:status => "err", :error => "Faltan parámetros."}.to_json
     end
     if params[:password].length > 0
         if params[:password].length < PasswordMinLength
             return {
                 :status => "err",
-                :error => "Password is too short. "+
-                          "Min length: #{PasswordMinLength}"
+                :error => "Clave muy corta. "+
+                          "Longitud mínima: #{PasswordMinLength}"
             }.to_json
         end
         $r.hmset("user:#{$user['id']}","password",
@@ -452,9 +452,9 @@ end
 
 post '/api/votecomment' do
     content_type 'application/json'
-    return {:status => "err", :error => "Not authenticated."}.to_json if !$user
+    return {:status => "err", :error => "No autenticado."}.to_json if !$user
     if not check_api_secret
-        return {:status => "err", :error => "Wrong form secret."}.to_json
+        return {:status => "err", :error => "API secret error."}.to_json
     end
     # Params sanity check
     if (!check_params "comment_id","vote_type") or
@@ -462,7 +462,7 @@ post '/api/votecomment' do
                                              params["vote_type"] != "down")
         return {
             :status => "err",
-            :error => "Missing comment ID or invalid vote type."
+            :error => "Falta el ID de la noticias o el tipo de votación es inválida."
         }.to_json
     end
     # Vote the news
@@ -472,7 +472,7 @@ post '/api/votecomment' do
         return { :status => "ok", :comment_id => params["comment_id"] }.to_json
     else
         return { :status => "err",
-                 :error => "Invalid parameters or duplicated vote." }.to_json
+                 :error => "Parámetros inválidos y voto duplicado." }.to_json
     end
 end
 
@@ -482,9 +482,9 @@ get  '/api/getnews/:sort/:start/:count' do
     start = params[:start].to_i
     count = params[:count].to_i
     if not [:latest,:top].index(sort)
-        return {:status => "err", :error => "Invalid sort parameter"}.to_json
+        return {:status => "err", :error => "Parámetro de ordenación inválido"}.to_json
     end
-    return {:status => "err", :error => "Count is too big"}.to_json if count > APIMaxNewsCount
+    return {:status => "err", :error => "Contador muy largo"}.to_json if count > APIMaxNewsCount
 
     start = 0 if start < 0
     getfunc = method((sort == :latest) ? :get_latest_news : :get_top_news)
@@ -617,10 +617,10 @@ end
 #               failed (detected testing the first return value).
 def create_user(username,password)
     if $r.exists("username.to.id:#{username.downcase}")
-        return nil, "Username is busy, please try a different one."
+        return nil, "El nombre de usuario está siendo usado, pruebe uno diferente."
     end
     if rate_limit_by_ip(3600*15,"create_user",request.ip)
-        return nil, "Please wait some time before creating a new user."
+        return nil, "Por favor espere algún tiempo antes de crear otro usuario."
     end
     id = $r.incr("users.count")
     auth_token = get_rand
@@ -840,7 +840,7 @@ def vote_news(news_id,user_id,vote_type)
     # up or down. If so return now.
     if $r.zscore("news.up:#{news_id}",user_id) or
        $r.zscore("news.down:#{news_id}",user_id)
-       return false,"Duplicated vote."
+       return false,"Voto duplicado."
     end
 
     # Check if the user has enough karma to perform this operation
@@ -849,7 +849,7 @@ def vote_news(news_id,user_id,vote_type)
              (get_user_karma(user_id) < NewsUpvoteMinKarma)) or
            (vote_type == :down and
              (get_user_karma(user_id) < NewsDownvoteMinKarma))
-            return false,"You don't have enough karma to vote #{vote_type}"
+            return false,"No tienes suficiente karma para votar #{vote_type}"
         end
     end
 
@@ -1131,7 +1131,7 @@ helpers do
 
   def get_domain(news)
     d = news_domain(news)
-    d.nil? ? '' : "at #{d}"
+    d.nil? ? '' : "en #{d}"
   end
 
   def news_url(news)
@@ -1312,10 +1312,10 @@ end
 def str_elapsed(t)
     seconds = Time.now.to_i - t
     return "now" if seconds <= 1
-    return "#{seconds} seconds ago" if seconds < 60
-    return "#{seconds/60} minutes ago" if seconds < 60*60
-    return "#{seconds/60/60} hours ago" if seconds < 60*60*24
-    return "#{seconds/60/60/24} days ago"
+    return "hace #{seconds} segundos" if seconds < 60
+    return "hace #{seconds/60} minutos" if seconds < 60*60
+    return "hace #{seconds/60/60} horas" if seconds < 60*60*24
+    return "hace #{seconds/60/60/24} días"
 end
 
 # Generic API limiting function

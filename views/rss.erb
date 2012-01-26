@@ -1,7 +1,7 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
     <title><%= SiteName %></title>
-    <description>Description pending</description>
+    <description>Agregador distribuido de contenidos sobre el impacto de la tecnología y de la innovación en los medios periodísticos.</description>
     <% news.each do |item| %>
       <% ln_url = "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}/news/#{item["id"]}" %>
       <% murl = !news_domain(item) ? ln_url : item['url'] %>

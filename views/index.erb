@@ -1,7 +1,7 @@
 <section id="newslist">
   <% news.each do |item| %>
     <%if item['del'] %>
-      <article class="deleted">[deleted news]</article>
+      <article class="deleted">[noticia borrada]</article>
     <% else %>
       <%= erb :news, :locals => {:news => item} %>
     <% end %>
@@ -9,5 +9,5 @@
 </section>
 
 <% if (pager > 0) %>
-  <a rel="next" href="/latest/<%= pager %>">[more]</a>
+  <a rel="next" href="/latest/<%= pager %>">[más]</a>
 <% end %>

@@ -1,23 +1,23 @@
 <section id="submit">
   <form id="submitnews" class="form" name="f">
 
-    <label class="labelform" for="title">title</label>
+    <label class="labelform" for="title">título</label>
     <input class="textfield" type="text" id="title" name="title" size="80" value="<%= params['t'] ? entities(params['t']) : '' %>">
     <label class="labelform" for="url">url</label>
     <input class="textfield" type="text" id="url" name="url" size="60" value="<%= params['u'] ? entities(params['u']) : '' %>">
 
-    <p class="info">or if you don't have an url type some text</p>
+    <p class="info">o si no tienes una url puedes escribir algún texto</p>
 
-    <label class="labelform" for="text">text</label>
+    <label class="labelform" for="text">texto</label>
     <textarea class="textarea" id="text" name="text" cols="60" rows="10"></textarea>
 
-    <button class="submit" type="submit">submit</button>
+    <button class="submit" type="submit">enviar</button>
 
     <div id="errormsg"></div>
     <input type="hidden" name="news_id" value="-1">
   </form>
 </section>
-<p class="note"><span class="bck">Submitting news is simple using the <a href="<%= get_bookmarlet %>">bookmarklet</a> (drag the link to your browse toolbar)</span></p>
+<p class="note"><span class="bck">Enviar noticias es muy simple con el bookmarket <a href="<%= get_bookmarlet %>">NIP</a> (arrastrarlo a la barra de herramientas del browser)</span></p>
 <script>
   NIP.init.push('submitnews');
 </script>

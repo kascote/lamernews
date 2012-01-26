@@ -8,7 +8,7 @@
     <input type="hidden" name="comment_id" value="-1">
     <input type="hidden" name="parent_id" value="-1">
     <textarea class="textarea" name="comment" cols="60" rows="10"></textarea>
-    <button class="submit" type="submit" name="post_comment">post comment</button>
+    <button class="submit" type="submit" name="post_comment">dejar comentario</button>
   </form>
 <% end %>
 <%= erb( :comments, :locals => {:news => news, :comment => comment, :user => user, :root => -1}) %>

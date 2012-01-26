@@ -4,19 +4,20 @@
         <address class="domain">
           <%= get_domain(news) %>
           <% if is_editable?(news) %>
-            <a href="/editnews/<%= news['id'] %>">[edit]</a>
+            <a href="/editnews/<%= news['id'] %>">[editar]</a>
           <% end %>
         </address>
         <a href="#down" title="vote down" class="downarrow <%= get_arrow_class(news['voted'], :down) %>">&#9660;</a>
         <p class="meta-data">
-          <%= "#{news["up"]} up and #{news["down"]} down, posted by " %>
+          <%# "#{news["up"]} up y #{news["down"]} down, compartida por " %>
+          <%= "compartida por " %>
           <username>
             <a href="/user/<%= urlencode(news['username']) %>" class="lnk"><%= entities(news['username']) %></a>
           </username>
           &nbsp;~&nbsp;
           <%= str_elapsed(news["ctime"].to_i) %>
           &nbsp;~&nbsp;
-          <a href="/news/<%= news['id'] %>" class="lnk"><%= "#{news['comments']} comments" %></a>
+          <a href="/news/<%= news['id'] %>" class="lnk"><%= "#{news['comments']} comentarios" %></a>
         </p>
         <%= debug_code(news) %>
       </article>

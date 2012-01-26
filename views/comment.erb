@@ -1,29 +1,31 @@
 <% news_id = comment['thread_id'] %>
-<article class="comment clearfix" style="<%= comment_indent(comment) %>" data-comment-id="" id="">
+<article class="comment clearfix" style="<%= comment_indent(comment) %>" data-comment-id="<%= "#{news_id}-#{comment['id']}" %>" id="<%= "#{news_id}-#{comment['id']}" %>">
   <span><img class="avatar" src="<%= gravatar_url(user) %>"></span>
   <span class="info">
     <span class="username">
       <a href="/user/<%= urlencode(user['username']) %>"><%= entities(user['username']) %></a>
     </span>
     &nbsp;~&nbsp;<%= str_elapsed(comment['ctime'].to_i) %>&nbsp;~&nbsp;
+    <!--
     <% if !comment['topcomment'] %>
-      <%= compute_comment_score(comment) %> points
+      <%= compute_comment_score(comment) %> puntos
       &nbsp;
       <a href="#up" title="vote up" class="uparrow <%= comment_arrow_class(comment, :up) %>">&#9650;</a>
       <a href="#down" title="vote down" class="downarrow <%= comment_arrow_class(comment, :down) %>">&#9660;</a>
       &nbsp;
     <% end %>
+    -->
     <% if !comment['topcomment'] %>
     <a class="reply" href="/comment/<%= "#{news_id}/#{comment['id']}" %>">link</a>
     &nbsp;
     <% end %>
     <% if is_logged_in? and !comment['topcomment'] %>
-    <a class="reply" href="/reply/<%= "#{news_id}/#{comment['id']}" %>">reply</a>
+    <a class="reply" href="/reply/<%= "#{news_id}/#{comment['id']}" %>">responder</a>
     &nbsp;
     <% end %>
     <% if show_edit_link(comment) %>
-      <a href="/editcomment/<%= "#{news_id}/#{comment['id']}" %>" class="reply">edit</a>
-      <%= "(#{ (CommentEditTime - (Time.now.to_i-comment['ctime'].to_i))/60 } minutes left)" %>
+      <a href="/editcomment/<%= "#{news_id}/#{comment['id']}" %>" class="reply">editar</a>
+      <%= "(restan #{ (CommentEditTime - (Time.now.to_i-comment['ctime'].to_i))/60 } minutos )" %>
     <% end %>
   </span> <!-- info -->
   <pre><%= urls_to_links(entities(comment['body'].strip))%></pre>
