@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # Copyright 2011 Salvatore Sanfilippo. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -91,7 +92,7 @@ get '/latest/:start' do
     pager = start+50
   end
 
-  erb :index, :locals => {:news => news, :pager => pager, :title => 'Ultimas Noticias'}
+  erb :index, :locals => {:news => news, :pager => pager, :title => 'Últimas Noticias'}
 end
 
 get '/saved/:start' do
@@ -245,7 +246,7 @@ post '/api/logout' do
     else
         return {
             :status => "err",
-            :error => "Credenciales erroneas o codigo de API invalido."
+            :error => "Credenciales erroneas o códig de API inválido."
         }.to_json
     end
 end
@@ -284,7 +285,7 @@ post '/api/create_account' do
     if params[:password].length < PasswordMinLength
         return {
             :status => "err",
-            :error => "La clave es muy corta. Longitud minima: #{PasswordMinLength}"
+            :error => "La clave es muy corta. Longitud mínima: #{PasswordMinLength}"
         }.to_json
     end
     auth,errmsg = create_user(params[:username],params[:password])
@@ -311,7 +312,7 @@ post '/api/submit' do
                                 params[:text].length == 0)
         return {
             :status => "err",
-            :error => "Por favor ingrese un Titulo y una URL o un texto."
+            :error => "Por favor ingrese un Título y una URL o un texto."
         }.to_json
     end
     # Make sure the URL is about an acceptable protocol, that is
@@ -329,7 +330,7 @@ post '/api/submit' do
         if submitted_recently
             return {
                 :status => "err",
-                :error => "Ya envio una noticia recientemente, "+
+                :error => "Ya envió una noticia recientemente, "+
                 "por favor espere #{allowed_to_post_in_seconds} segundos."
             }.to_json
         end
@@ -341,7 +342,7 @@ post '/api/submit' do
         if !news_id
             return {
                 :status => "err",
-                :error => "Parametors invalidos, la noticias es muy vieja para ser modificada o la URL de la noticias ya fue compartida"
+                :error => "Parámetors inválidos, la noticias es muy vieja para ser modificada o la URL de la noticias ya fue compartida"
             }.to_json
         end
     end
@@ -360,7 +361,7 @@ post '/api/delnews' do
     if (!check_params "news_id")
         return {
             :status => "err",
-            :error => "Por favor ingreso un titulo."
+            :error => "Por favor ingreso un título."
         }.to_json
     end
     if del_news(params[:news_id],$user["id"])
@@ -380,7 +381,7 @@ post '/api/votenews' do
                                                  params["vote_type"] != "down")
         return {
             :status => "err",
-            :error => "No se encontro el ID de la noticias o tipo de voto invalido."
+            :error => "No se encontró el ID de la noticias o tipo de voto inválido."
         }.to_json
     end
     # Vote the news
@@ -412,7 +413,7 @@ post '/api/postcomment' do
                           params["parent_id"].to_i,params["comment"])
     return {
         :status => "err",
-        :error => "Noticia invalida, comentario o tiempo de edicion expirado."
+        :error => "Noticia inválida, comentario o tiempo de edición expirado."
     }.to_json if !info
     return {
         :status => "ok",
@@ -430,14 +431,14 @@ post '/api/updateprofile' do
         return {:status => "err", :error => "API secret error"}.to_json
     end
     if !check_params(:about, :email, :password)
-        return {:status => "err", :error => "Faltan parametros."}.to_json
+        return {:status => "err", :error => "Faltan parámetros."}.to_json
     end
     if params[:password].length > 0
         if params[:password].length < PasswordMinLength
             return {
                 :status => "err",
                 :error => "Clave muy corta. "+
-                          "Longitud minima: #{PasswordMinLength}"
+                          "Longitud mínima: #{PasswordMinLength}"
             }.to_json
         end
         $r.hmset("user:#{$user['id']}","password",
@@ -461,7 +462,7 @@ post '/api/votecomment' do
                                              params["vote_type"] != "down")
         return {
             :status => "err",
-            :error => "Falta el ID de la noticias o el tipo de votacion es invalida."
+            :error => "Falta el ID de la noticias o el tipo de votación es inválida."
         }.to_json
     end
     # Vote the news
@@ -471,7 +472,7 @@ post '/api/votecomment' do
         return { :status => "ok", :comment_id => params["comment_id"] }.to_json
     else
         return { :status => "err",
-                 :error => "Parametros invalidos y voto duplicado." }.to_json
+                 :error => "Parámetros inválidos y voto duplicado." }.to_json
     end
 end
 
@@ -481,7 +482,7 @@ get  '/api/getnews/:sort/:start/:count' do
     start = params[:start].to_i
     count = params[:count].to_i
     if not [:latest,:top].index(sort)
-        return {:status => "err", :error => "Parametro de ordenacion invalido"}.to_json
+        return {:status => "err", :error => "Parámetro de ordenación inválido"}.to_json
     end
     return {:status => "err", :error => "Contador muy largo"}.to_json if count > APIMaxNewsCount
 
@@ -616,10 +617,10 @@ end
 #               failed (detected testing the first return value).
 def create_user(username,password)
     if $r.exists("username.to.id:#{username.downcase}")
-        return nil, "El nombre de usuario esta siendo usado, pruebe uno diferente."
+        return nil, "El nombre de usuario está siendo usado, pruebe uno diferente."
     end
     if rate_limit_by_ip(3600*15,"create_user",request.ip)
-        return nil, "Por favor espere algun tiempo antes de crear otro usuario."
+        return nil, "Por favor espere algún tiempo antes de crear otro usuario."
     end
     id = $r.incr("users.count")
     auth_token = get_rand
@@ -693,7 +694,9 @@ end
 
 # Has the user submitted a news story in the last `NewsSubmissionBreak` seconds?
 def submitted_recently
-  allowed_to_post_in_seconds > 0
+  #TODO: REMOVE
+  return false
+  #allowed_to_post_in_seconds > 0
 end
 
 # Indicates when the user is allowed to submit another story after the last.
@@ -1312,7 +1315,7 @@ def str_elapsed(t)
     return "hace #{seconds} segundos" if seconds < 60
     return "hace #{seconds/60} minutos" if seconds < 60*60
     return "hace #{seconds/60/60} horas" if seconds < 60*60*24
-    return "hace #{seconds/60/60/24} dias"
+    return "hace #{seconds/60/60/24} días"
 end
 
 # Generic API limiting function
