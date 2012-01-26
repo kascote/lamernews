@@ -119,7 +119,7 @@ get '/usercomments/:username/:start' do
       pager = start+50
     end
 
-    erb :usercomments, :locals => {:title => "#{entities(user['username'])} comentarios",
+    erb :usercomments, :locals => {:title => "Comentarios de #{entities(user['username'])}",
                                    :comments => comments,
                                    :user => user,
                                    :pager => pager
