@@ -11,6 +11,7 @@
         <link><%= entities(murl) %></link>
         <description><![CDATA[<a href="<%= ln_url %>">Comments</a>]]></description>
         <comments><%= entities(ln_url) %></comments>
+        <author><%= entities(item['username']) %></author>
       </item>
     <% end %>
   </channel>
