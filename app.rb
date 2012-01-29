@@ -72,10 +72,14 @@ get '/' do
 end
 
 get '/rss' do
-    content_type 'text/xml', :charset => 'utf-8'
-    news,count = get_latest_news
+  content_type 'text/xml', :charset => 'utf-8'
+  news,count = get_latest_news
 
-    erb :rss, :layout => false, :locals => {:news => news, :count => count}
+  erb :rss, :layout => false, :locals => {:news => news, :count => count}
+end
+
+get '/acerca' do
+  erb :acerca, :locals => {:title => 'acerca'}
 end
 
 get '/latest' do
@@ -1311,11 +1315,14 @@ end
 # has elapsed from the specified time, in the form "2 hours ago".
 def str_elapsed(t)
     seconds = Time.now.to_i - t
-    return "now" if seconds <= 1
-    return "hace #{seconds} segundos" if seconds < 60
-    return "hace #{seconds/60} minutos" if seconds < 60*60
-    return "hace #{seconds/60/60} horas" if seconds < 60*60*24
-    return "hace #{seconds/60/60/24} días"
+    return "recién" if seconds < 60
+    return pluralize(seconds/60,    'minuto', 'minutos') if seconds < 3600   # 60*60
+    return pluralize(seconds/3600,  'hora',   'horas')   if seconds < 86400  # 60*60*24
+    return pluralize(seconds/86400, 'día',    'días')                        # 60 * 60 * 24
+end
+
+def pluralize(count, singular, plural)
+  "hace #{count || 0} " + ((count == 1 || count =~ /^1(\.0+)?$/) ? singular : (plural || singular.pluralize))
 end
 
 # Generic API limiting function

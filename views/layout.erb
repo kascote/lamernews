@@ -37,8 +37,8 @@
     <header class="header">
       <h1 class="logo">Nerds in Press</h1>
       <nav class="menu">
-        <a class="link-nav" href="/">top</a>
-        <a class="link-nav" href="/latest/0">últimas</a>
+        <a class="link-nav" href="/">lo mejor</a>
+        <a class="link-nav" href="/latest/0">lo último</a>
         <a class="link-nav" href="/submit">enviar</a>
         <% if is_logged_in? %>
           <% count = $user['replies'] || 0 %>
@@ -58,11 +58,12 @@
       <%= yield %>
     </div> <!-- main -->
     <footer class="footer">
+      <a class="lnk" href="/acerca">acerca</a>
+      &nbsp;~&nbsp;
       <a class="lnk" href="/rss">rss feed</a>
       &nbsp;~&nbsp;
       <a class="lnk" target="_blank" href="http://github.com/kascote/lamernews">código</a>
-      &nbsp;~&nbsp;
-      <a class="lnk" target="_blank" href="http://netflux.com.ar">por netFlux</a>
+      <p>handcrafted by <a class="lnk" target="_blank" href="http://netflux.com.ar">netFlux</a></p>
     </footer>
   </div> <!--! end of #container -->
 
