@@ -12,6 +12,7 @@
         <description><![CDATA[<a href="<%= ln_url %>">Comments</a>]]></description>
         <comments><%= entities(ln_url) %></comments>
         <author><%= entities(item['username']) %></author>
+        <pubDate><%= Time.at(item['ctime'].to_i).to_date.rfc822 %></pubDate>
       </item>
     <% end %>
   </channel>
