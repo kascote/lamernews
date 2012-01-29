@@ -28,6 +28,7 @@
 
 require 'app_config'
 require 'rubygems'
+require 'date'
 require 'hiredis'
 require 'redis'
 require 'sinatra'
