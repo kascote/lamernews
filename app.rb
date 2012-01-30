@@ -238,6 +238,17 @@ get "/user/:username" do
                           :posted_news => posted_news, :posted_comments => posted_comments }
 end
 
+get "/user/:username/rss" do
+  user = get_user_by_username(params[:username])
+  halt(404,"El usuario no existe") if !user
+  content_type 'text/xml', :charset => 'utf-8'
+  news,count = get_user_news(user['id'])
+
+  erb :rss, :layout => false, :locals => {:news => news, :count => count}
+end
+
+
+
 ###############################################################################
 # API implementation
 ###############################################################################
@@ -1075,6 +1086,13 @@ def get_saved_news(user_id,start,count)
     numitems = $r.zcard("user.saved:#{user_id}").to_i
     news_ids = $r.zrevrange("user.saved:#{user_id}",start,start+(count-1))
     return get_news_by_id(news_ids),numitems
+end
+
+# Get news posted by a user
+def get_user_news(user_id)
+  numitems = $r.zcard("user.posted:#{user_id}").to_i
+  news_ids = $r.zrevrange("user.posted:#{user_id}",0,50)
+  return get_news_by_id(news_ids),numitems
 end
 
 ###############################################################################
