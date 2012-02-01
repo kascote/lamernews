@@ -1,6 +1,7 @@
 # General
 SiteName = "Nerds in Press"
-SiteUrl = "http://nerdsinpress.com"
+#SiteUrl = "http://nerdsinpress.com/"
+SiteUrl = "http://localhost:9393/"
 
 # Redis config
 RedisHost = "127.0.0.1"
@@ -46,6 +47,7 @@ RankAgingFactor = 2.2
 PreventRepostTime = 3600*48
 NewsSubmissionBreak = 60*15
 SavedNewsPerPage = 10
+NewsPerPage = 50
 
 # Footer links
 FooterTwitterLink = false

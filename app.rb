@@ -35,7 +35,8 @@ require 'sinatra'
 require 'json'
 require 'digest/sha1'
 require 'digest/md5'
-require 'page'
+#require 'page'
+require 'cgi'
 require 'comments'
 require 'pbkdf2'
 require 'openssl' if UseOpenSSL
@@ -68,9 +69,28 @@ before do
 end
 
 get '/' do
-  news, numitems = get_top_news
-  erb :index, :locals => { :news => news, :pager => -1, :title => 'Top News' }
+  get_news(0)
 end
+
+get '/latest' do
+  redirect '/latest/0'
+end
+
+get '/latest/:start' do
+  get_news(params[:start].to_i)
+end
+
+def get_news(start, title=nil)
+  news, numitems = get_latest_news(start,NewsPerPage)
+
+  pager = -1
+  if (start+NewsPerPage) < numitems
+    pager = start+NewsPerPage
+  end
+
+  erb :index, :locals => {:news => news, :pager => pager, :title => title}
+end
+
 
 get '/rss' do
   content_type 'text/xml', :charset => 'utf-8'
@@ -83,31 +103,19 @@ get '/acerca' do
   erb :acerca, :locals => {:title => 'acerca'}
 end
 
-get '/latest' do
-    redirect '/latest/0'
-end
+#get '/search' do
+#  erb :search, :locals => {:title => 'search'}
+#end
 
-get '/latest/:start' do
-  start = params[:start].to_i
-
-  news, numitems = get_latest_news(start,50)
-
-  pager = -1
-  if (start+50) < numitems
-    pager = start+50
-  end
-
-  erb :index, :locals => {:news => news, :pager => pager, :title => 'Últimas Noticias'}
-end
 
 get '/saved/:start' do
     redirect "/login" if !$user
     start = params[:start].to_i
-    news,numitems = get_saved_news($user['id'],start,50)
+    news,numitems = get_saved_news($user['id'],start,NewsPerPage)
 
     pager = -1
-    if (start+50) < numitems
-      pager = start+50
+    if (start+NewsPerPage) < numitems
+      pager = start+NewsPerPage
     end
 
     erb :saved_news, :locals => {:title => 'Noticias Guardadas', :news => news, :pager => pager}
@@ -117,11 +125,11 @@ get '/usercomments/:username/:start' do
     start = params[:start].to_i
     user = get_user_by_username(params[:username])
     halt(404,"El usuario no existe") if !user
-    comments, numitems = get_user_comments(user['id'],start,50)
+    comments, numitems = get_user_comments(user['id'],start,NewsPerPage)
 
     pager = -1
-    if (start+50) < numitems
-      pager = start+50
+    if (start+NewsPerPage) < numitems
+      pager = start+NewsPerPage
     end
 
     erb :usercomments, :locals => {:title => "Comentarios de #{entities(user['username'])}",
@@ -135,7 +143,7 @@ end
 get '/replies' do
     redirect "/login" if !$user
     comments,count = get_user_comments($user['id'],0,SubthreadsInRepliesPage)
-    erb :replies, :locals => {:comments => comments, :title =>'your threads'}
+    erb :replies, :locals => {:comments => comments, :title =>'Tus comentarios'}
 end
 
 get '/login' do
@@ -180,7 +188,7 @@ get "/comment/:news_id/:comment_id" do
   halt(404,"404 - Esta noticia no existe.") if !news
   comment = Comments.fetch(params["news_id"],params["comment_id"])
   halt(404,"404 - Este comentario no existe.") if !comment
-  erb :comment_news, :locals => {:news => news, :comment => comment, :title => 'Comment'}
+  erb :comment_news, :locals => {:news => news, :comment => comment, :title => "Comentarios para: #{news['title']}"}
 end
 
 def render_comment_subthread(comment,sep="")
@@ -196,7 +204,7 @@ get "/reply/:news_id/:comment_id" do
   halt(404,"404 - Este comentario no existe.") if !comment
   user = get_user_by_id(comment["user_id"]) || DeletedUser
 
-  erb :reply, :locals => {:news => news, :comment => comment, :user => user, :title => 'Responder al comentario' }
+  erb :reply, :locals => {:news => news, :comment => comment, :user => user, :title => "Responder a: #{news['title']}" }
 end
 
 get "/editcomment/:news_id/:comment_id" do
@@ -1092,7 +1100,7 @@ end
 # Get news posted by a user
 def get_user_news(user_id)
   numitems = $r.zcard("user.posted:#{user_id}").to_i
-  news_ids = $r.zrevrange("user.posted:#{user_id}",0,50)
+  news_ids = $r.zrevrange("user.posted:#{user_id}",0,NewsPerPage)
   return get_news_by_id(news_ids),numitems
 end
 
