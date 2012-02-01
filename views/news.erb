@@ -19,7 +19,11 @@
           &nbsp;~&nbsp;
           <%= str_elapsed(news["ctime"].to_i) %>
           &nbsp;~&nbsp;
+          <% if news['comments'].to_i == 0 %>
+          <a href="/news/<%= news['id'] %>" class="lnk">comentala</a>
+          <% else %>
           <a href="/news/<%= news['id'] %>" class="lnk"><%= "#{news['comments']} comentarios" %></a>
+          <% end %>
         </p>
         <%= debug_code(news) %>
       </article>
