@@ -68,7 +68,7 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
-#main                                         { margin: 20px 0 0 30px; }
+#main                                         { margin: 20px 30px 0 30px; }
 .news-title                                   { display: inline; font-size: 22px; line-height: 40px; font-weight: 300; }
 .news-article                                 { margin: 20px 0; }
 .news-article .domain                         { display: inline; font-style: normal; color: #999; }
@@ -99,7 +99,7 @@ td { vertical-align: top; }
 .form .textfield                              { width: 300px; height: 20px; font-size: 16px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
 .form .labelform                              { font-size: 16px; }
 .form .submit                                 { display: block; padding: 5px 20px; }
-.form .textarea                               { width: 400px; height: 100px; }
+.form .textarea                               { width: 600px; height: 130px; }
 #submitnews .textfield                        { width: 400px !important; }
 #comments                                     { margin-top: 50px; }
 .comment                                      { position: relative; width: 800px; display: block; min-height: 50px; margin-bottom: 40px;}
@@ -111,19 +111,23 @@ td { vertical-align: top; }
 .userinfo .username                           { position: relative; left: 15px; display: inline; font-size: 28px; color: #444; font-weight: normal; }
 .userinfo .about                              { color: #666; font-style: italic; margin: 20px; }
 .userinfo .meta-data                          { list-style: none; padding: 0; margin-bottom: 30px; }
+.userinfo .meta-data li                       { line-height: 1.6em; }
 .bck                                          { background-color: #ffa; padding: 3px; }
-.commentreplies                               { margin: 0 30px 50px 50px;}
+.commentreplies                               { margin: 20px 50px 0;}
 .commentreplies .title                        { font-weight: normal; border-bottom: 1px solid #999; }
 .commentreplies .comment                      { margin-bottom: 50px; }
 .comment.deleted                              { margin-bottom: 10px !important; min-height: 20px !important; margin-left: 10px; }
 .page-title                                   { font-weight: normal; }
-.singlecomment                                { background-color: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 10px; }
+.singlecomment                                { background-color: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 10px 30px 0 0; }
 .singlecomment .comment                       { margin-bottom: 0px !important; }
 .acerca                                       { width: 800px; margin: 0 auto; }
 .acerca .text                                 { font-size: 18px; font-weight: 300; line-height: 1.6em; }
 .acerca .news-title                           { margin-top: 40px; }
-
-
+.share                                        { padding: 10px 0 20px 0; }
+.share .twitter-share-button                  { height: 25px !important; }
+#cse-search-form                              { float: right; margin-right: 30px; }
+.profile-form                                 { border: 1px solid #DDD; padding: 20px; background-color: whiteSmoke; border-image: initial; }
+.profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
 
 
 
@@ -150,6 +154,10 @@ td { vertical-align: top; }
 
 @media only screen and (min-width: 480px) {
 
+  /*
+.header .logo { margin: 10px; }
+.header .menu { display: block; margin: 10px 30px 0; font-weight: 300; }
+*/
 
 }
 
