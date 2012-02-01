@@ -1,6 +1,7 @@
       <article class="news-article" data-news-id="<%= news['id'] %>">
         <a href="#up" title="vote up" class="uparrow <%= get_arrow_class(news['voted'], :up) %>">&#9650;</a>
         <h1 class="news-title"><a href="<%= news_url(news) %>"><%= entities(news['title']) %></a></h1>
+        <div class="mini-cont">
         <address class="domain">
           <%= get_domain(news) %>
           <% if is_editable?(news) %>
@@ -8,6 +9,7 @@
           <% end %>
         </address>
         <a href="#down" title="vote down" class="downarrow <%= get_arrow_class(news['voted'], :down) %>">&#9660;</a>
+        </div>
         <p class="meta-data">
           <%# "#{news["up"]} up y #{news["down"]} down, compartida por " %>
           <%= "compartida por " %>

@@ -35,6 +35,14 @@
 
   <div id="container">
     <header class="header">
+      <nav class="account">
+      <% if is_logged_in? %>
+        <a class="link-nav" href="/user/<%= urlencode($user['username']) %>"><%= "#{entities($user['username'])} (#{$user['karma']})" %></a>
+        <a class="link-nav" href="/logout?apisecret=<%= $user['apisecret'] %>">desconectarse</a>
+      <% else %>
+        <a class="link-nav" href="/login">conectarse / registrarse</a>
+      <% end %>
+      </nav>
       <h1 class="logo"><a href="/">Nerds in Press</a></h1>
       <nav class="menu">
         <a class="link-nav" href="/">lo último</a>
@@ -44,14 +52,6 @@
           <a class="link-nav" href="/replies">respuestas <%= count.to_i > 0 ? "<sup>#{count}</sup>" : "" %></a>
         <% end %>
         <a class="link-nav" href="http://amphibia.com.ar" target="_blank">blog</a>
-      </nav>
-      <nav class="account">
-      <% if is_logged_in? %>
-        <a class="link-nav" href="/user/<%= urlencode($user['username']) %>"><%= "#{entities($user['username'])} (#{$user['karma']})" %></a>
-        <a class="link-nav" href="/logout?apisecret=<%= $user['apisecret'] %>">desconectarse</a>
-      <% else %>
-        <a class="link-nav" href="/login">conectarse / registrarse</a>
-      <% end %>
       </nav>
     </header>
     <!-- div id="cse-search-form" style="text-align: right; width: 400px"></div -->

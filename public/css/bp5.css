@@ -84,12 +84,12 @@ td { vertical-align: top; }
 .lnk:hover,
 .lnk:visited,
 .lnk                                          { color: #444; }
-.header                                       { padding: 10px 0; height: 30px; border-bottom: 5px double #ddd; }
+.header                                       { padding: 10px 0; border-bottom: 5px double #ddd; }
 .header .logo                                 { font-weight: 300; font-style: normal; color: #000; display: inline; margin: 30px; font-size: 28px; }
 .header .menu                                 { display: inline; padding: 0 10px; font-weight: 300; }
 .header .link-nav:visited,
 .header .link-nav                             { color: #666; padding: 0 10px; }
-.header .account                              { position: absolute; top: 21px; right: 20px; font-weight: 300; }
+.header .account                              { float: right; font-weight: 300; }
 .footer                                       { margin-top: 50px; border-top: 5px double #ddd; text-align: center; padding: 20px 0;  }
 #login                                        { margin: 20px 0; }
 #profileform,
@@ -128,6 +128,7 @@ td { vertical-align: top; }
 #cse-search-form                              { float: right; margin-right: 30px; }
 .profile-form                                 { border: 1px solid #DDD; padding: 20px; background-color: whiteSmoke; border-image: initial; }
 .profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
+.mini-cont                                    { display: inline; }
 
 
 
@@ -152,12 +153,15 @@ td { vertical-align: top; }
 
 /* ==|== media queries ====================================================== */
 
-@media only screen and (min-width: 480px) {
+@media only screen and (max-width: 480px) {
 
-  /*
-.header .logo { margin: 10px; }
-.header .menu { display: block; margin: 10px 30px 0; font-weight: 300; }
-*/
+  .header                                     {  }
+  .header .logo                               { margin: 25px 10px 0; display: block; }
+  .header .menu                               { display: block; margin: 10px 0 0; padding: 0; font-weight: 300; }
+  #main                                       { margin: 20px 5px 0 5px; }
+  .news-title                                 { line-height: 1.4em; }
+  .news-article .meta-data                    { margin: 10px 0 0 0; }
+  .mini-cont                                  { display: block; }
 
 }
 
