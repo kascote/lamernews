@@ -25,7 +25,6 @@ function login() {
 
 function submit() {
 try {
-    console.log(typeof(apisecret));
     if (typeof(apisecret) == 'undefined') return false; // Not logged in
     var data = {
         news_id: $("input[name=news_id]").val(),
@@ -52,8 +51,6 @@ try {
         }
     });
 } catch (e) {
-  console.log(e);
-}
     return false;
 }
 
@@ -305,6 +302,13 @@ NIP.startup = function() {
 
 $(function() {
   NIP.startup();
-  setKeyboardNavigation();
+
+  $('#newslist').click(function(e) {
+    var $e = $(e.target);
+    if ($e.hasClass('news-link')) {
+      _gaq.push(['_trackEvent', 'News', 'link', $e.text()]);
+    }
+  });
+  //setKeyboardNavigation();
 });
 

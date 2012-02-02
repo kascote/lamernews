@@ -1,6 +1,6 @@
       <article class="news-article" data-news-id="<%= news['id'] %>">
         <a href="#up" title="vote up" class="uparrow <%= get_arrow_class(news['voted'], :up) %>">&#9650;</a>
-        <h1 class="news-title"><a href="<%= news_url(news) %>"><%= entities(news['title']) %></a></h1>
+        <h1 class="news-title"><a class="news-link" href="<%= news_url(news) %>"><%= entities(news['title']) %></a></h1>
         <div class="mini-cont">
         <address class="domain">
           <%= get_domain(news) %>
