@@ -15,6 +15,7 @@
     <li><a href="/saved/0">noticias guardadas</a></li>
     <% end %>
     <li><a href="/usercomments/<%= urlencode(user['username']) %>/0">comentarios</a></li>
+    <li><a href="/usercomments/<%= urlencode(user['username']) %>/rss">feed del usuario</a></li>
   </ul>
 </section>
 <% if owner %>

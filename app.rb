@@ -95,7 +95,6 @@ end
 get '/rss' do
   content_type 'text/xml', :charset => 'utf-8'
   news,count = get_latest_news
-
   erb :rss, :layout => false, :locals => {:news => news, :count => count}
 end
 
