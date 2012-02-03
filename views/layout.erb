@@ -54,7 +54,7 @@
         <a class="link-nav" href="http://amphibia.com.ar" target="_blank">blog</a>
       </nav>
     </header>
-    <!-- div id="cse-search-form" style="text-align: right; width: 400px"></div -->
+    <div id="cse-search-form" style="text-align: right; width: 400px"></div>
     <div id="main" role="main">
       <%= yield %>
     </div> <!-- main -->
@@ -94,20 +94,21 @@
   <![endif]-->
 
   <% if request.url.downcase == SiteUrl %>
-  <!-- script src="https://www.google.com/jsapi" type="text/javascript"></script>
+  <script src="https://www.google.com/jsapi" type="text/javascript"></script>
   <script type="text/javascript">
     google.load('search', '1', {language : 'es', style : google.loader.themes.MINIMALIST});
     google.setOnLoadCallback(function() {
       var customSearchOptions = {};
       var customSearchControl = new google.search.CustomSearchControl(
         '001174654870998432211:WMX1678541078', customSearchOptions);
-      customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
+      //customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
+      customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
       var options = new google.search.DrawOptions();
       options.setAutoComplete(true);
       options.enableSearchboxOnly("<%= SiteUrl %>search");
       customSearchControl.draw('cse-search-form', options);
     }, true);
-  </script -->
+  </script>
   <% end %>
 
   <script>

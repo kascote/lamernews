@@ -73,6 +73,7 @@ td { vertical-align: top; }
 .news-article                                 { margin: 20px 0; }
 .news-article .domain                         { display: inline; font-style: normal; color: #999; }
 .news-article .meta-data                      { margin: 0 0 0 30px; color: #999; }
+#newslist                                     { margin-top: 50px; }
 .downarrow,
 .uparrow                                      { color: #999; margin: 0 5px; }
 .downarrow.disabled,

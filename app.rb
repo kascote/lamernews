@@ -109,9 +109,9 @@ get '/acerca' do
   erb :acerca, :locals => {:title => 'acerca'}
 end
 
-#get '/search' do
-#  erb :search, :locals => {:title => 'search'}
-#end
+get '/search' do
+  erb :search, :locals => {:title => 'search'}
+end
 
 
 get '/saved/:start' do

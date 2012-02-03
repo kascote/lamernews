@@ -14,13 +14,12 @@
     return '';
   }
 
-  //google.load('search', '1', {language : 'es', style : google.loader.themes.MINIMALIST});
-  google.load('search', '1', {language : 'es'});
+  google.load('search', '1', {language : 'es', style : google.loader.themes.MINIMALIST});
   google.setOnLoadCallback(function() {
     var customSearchOptions = {};
-    var customSearchControl = new google.search.CustomSearchControl(
-      '001174654870998432211:WMX1678541078', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
+    var customSearchControl = new google.search.CustomSearchControl('001174654870998432211:WMX1678541078', customSearchOptions);
+    //customSearchControl.setResultSetSize(google.search.Search.LARGE_RESULTSET);
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
     var options = new google.search.DrawOptions();
     options.setAutoComplete(true);
     customSearchControl.draw('cse', options);
@@ -132,7 +131,7 @@
   .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
     border-color: #333333;
     background-color: #333333;
-    color: #444444;
+    color: #ffffff;
   }
   .gsc-webResult.gsc-result.gsc-promotion {
     border-color: #CCCCCC;
