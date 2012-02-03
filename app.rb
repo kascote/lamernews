@@ -99,6 +99,13 @@ get '/rss' do
   erb :rss, :layout => false, :locals => {:news => news, :count => count}
 end
 
+get '/feed' do
+  content_type 'text/xml', :charset => 'utf-8'
+  news,count = get_latest_news
+
+  erb :rss, :layout => false, :locals => {:news => news, :count => count}
+end
+
 get '/acerca' do
   erb :acerca, :locals => {:title => 'acerca'}
 end
