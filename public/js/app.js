@@ -43,7 +43,11 @@ try {
                 if (r.news_id == -1) {
                     window.location.href = "/";
                 } else {
+                  if (r.duplicated == 1) {
+                    window.location.href = "/news/"+r.news_id+"?duplicated=1";
+                  } else {
                     window.location.href = "/news/"+r.news_id;
+                  }
                 }
             } else {
                 $("#errormsg").html(r.error)

@@ -364,11 +364,15 @@ post '/api/submit' do
                 "por favor espere #{allowed_to_post_in_seconds} segundos."
             }.to_json
         end
-        news_id = insert_news(params[:title],params[:url],params[:text],
-                              $user["id"])
+        if is_duplicated?(params[:url])
+            return {
+              :status => "err",
+              :error => "Esa noticia ya fue ingresada."
+            }.to_json
+        end
+        news_id = insert_news(params[:title],params[:url],params[:text], $user["id"])
     else
-        news_id = edit_news(params[:news_id],params[:title],params[:url],
-                            params[:text],$user["id"])
+        news_id = edit_news(params[:news_id],params[:title],params[:url], params[:text],$user["id"])
         if !news_id
             return {
                 :status => "err",
@@ -724,10 +728,16 @@ end
 
 # Has the user submitted a news story in the last `NewsSubmissionBreak` seconds?
 def submitted_recently
-  #TODO: REMOVE
+  #TODO: remove
   return false
   #allowed_to_post_in_seconds > 0
 end
+
+# Check if the URL is already posted
+def is_duplicated?(url)
+  $r.sismember('news:url', OpenSSL::Digest::SHA1.new(url).to_s)
+end
+
 
 # Indicates when the user is allowed to submit another story after the last.
 def allowed_to_post_in_seconds
@@ -960,10 +970,6 @@ def insert_news(title,url,text,user_id)
     if url.length == 0
         url = "text://"+text[0...CommentMaxLength]
     end
-    # Check for already posted news with the same URL.
-    if !textpost and (id = $r.get("url:"+url))
-        return id.to_i
-    end
     # We can finally insert the news.
     ctime = Time.new.to_i
     news_id = $r.incr("news.count")
@@ -988,6 +994,8 @@ def insert_news(title,url,text,user_id)
     $r.zadd("news.top",rank,news_id)
     # Add the news url for some time to avoid reposts in short time
     $r.setex("url:"+url,PreventRepostTime,news_id) if !textpost
+    # Add url's hash to check for duplicates
+    $r.sadd('news:url', OpenSSL::Digest::SHA1.new(url).to_s)
     # Set a timeout indicating when the user may post again
     $r.setex("user:#{$user['id']}:submitted_recently",NewsSubmissionBreak,'1')
     return news_id
