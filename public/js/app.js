@@ -311,7 +311,6 @@ $(function() {
   $('#newslist').click(function(e) {
     var $e = $(e.target);
     if ($e.hasClass('news-link')) {
-      console.log('track event', $e.attr('href'));
       _gaq.push(['_trackEvent', 'News', 'link', $e.text()]);
       setTimeout('document.location = "' + $e.attr('href') + '"', 700);
       return false;
