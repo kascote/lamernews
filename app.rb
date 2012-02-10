@@ -406,7 +406,7 @@ end
 
 post '/api/votenews' do
     content_type 'application/json'
-    return {:status => "err", :error => "No autenticado."}.to_json if !$user
+    return {:status => "err", :error => "Debes estar conectado para participar."}.to_json if !$user
     if not check_api_secret
         return {:status => "err", :error => "API secret error."}.to_json
     end
@@ -486,7 +486,7 @@ end
 
 post '/api/votecomment' do
     content_type 'application/json'
-    return {:status => "err", :error => "No autenticado."}.to_json if !$user
+    return {:status => "err", :error => "Debes estar conectado para participar."}.to_json if !$user
     if not check_api_secret
         return {:status => "err", :error => "API secret error."}.to_json
     end
