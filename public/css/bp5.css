@@ -75,7 +75,8 @@ td { vertical-align: top; }
 .news-article .meta-data                      { margin: 0 0 0 30px; color: #999; }
 #newslist                                     { margin-top: 50px; }
 .downarrow,
-.uparrow                                      { color: #999; margin: 0 5px; }
+.uparrow                                      { color: #999; margin: 0 2px; }
+.favicon                                      { margin: 0 3px 0 0; }
 .downarrow.disabled,
 .uparrow.disabled                             { visibility: hidden; }
 .downarrow.voted,
