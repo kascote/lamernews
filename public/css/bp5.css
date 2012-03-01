@@ -8,7 +8,7 @@ audio:not([controls]) { display: none; }
 [hidden] { display: none; }
 
 html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-body { margin: 0; font-size: 14px; line-height: 1.231; font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif; -webkit-font-smoothing:antialiased; font-smoothing:antialiased; background-color: #fff; }
+body { margin: 0; font-size: 14px; line-height: 1.231; font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif; font-weight: 300; -webkit-font-smoothing:antialiased; font-smoothing:antialiased; background-color: #f5f5f5; }
 body, button, input, select, textarea { color: #444; }
 
 ::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
@@ -17,7 +17,7 @@ body, button, input, select, textarea { color: #444; }
 a { color: #000; text-decoration: none; }
 a:visited { color: #000; }
 a:hover { color: #000; text-decoration: underline; }
-a:focus { outline: thin dotted; }
+a:focus { outline: 0; }
 a:hover, a:active { outline: 0; }
 
 abbr[title] { border-bottom: 1px dotted; }
@@ -68,6 +68,69 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
+#main                                         { margin: 20px 30px 0 30px; }
+.header                                       { padding: 10px 0; border-bottom: 5px double #ddd; }
+.header .logo                                 { font-weight: 300; font-style: normal; color: #000; display: inline; margin: 30px; font-size: 28px; }
+.header .menu                                 { display: inline; padding: 0 10px; font-weight: 300; }
+.header .link-nav:visited,
+.header .link-nav                             { color: #666; padding: 0 10px; }
+.header .account                              { float: right; font-weight: 300; margin-right: 20px; }
+.footer                                       { border-top: 5px double #ddd; text-align: center; padding: 20px 0; color: #999; }
+#login                                        { margin: 20px 0; }
+.page-title                                   { font-weight: normal; }
+#newslist                                     { margin-bottom: 20px; }
+
+.news-article                                 { border: 1px solid #ddd; background-color: #fff; margin-bottom: 20px; border-radius: 3px; width: 100%; box-shadow: 1px 1px 5px #aaa; }
+.news-active                                  { border-left: 4px solid #6E93DB; }
+.news-title                                   { color: #444; font-weight: 300; font-size: 22px; margin: 0 0 5px 0;  text-shadow: 1px 1px 2px #bbb; }
+.news-link:visited                            { color: #aaa !important; text-shadow: none !important; }
+.vote                                         { width: 52px; text-align: center; vertical-align: middle; }
+.news-container                               { padding: 20px; }
+.news-article .meta-data                      { text-align: right; margin: 0; color: #777; }
+.domain                                       { color: #777; }
+.gsc-branding                                 { display: none !important; }
+.gsc-input                                    { padding: 3px; }
+#cse-search-form                              { margin: 20px auto 0; opacity: 0.4; -webkit-transition: opacity 1s ease; -o-transition: opacity 1s ease; -moz-transition: opacity 1s ease; -ms-transition: opacity 1s ease; transition: opacity 1s ease; }
+#cse-search-form:hover                        { opacity: 1; }
+.uparrow                                      { display: block; width: 30px; height: 40px; padding-top: 20px; margin-left: 20px; border: 1px solid #fff; }
+.uparrow:hover                                { background-color: #ffa; border: 1px solid #eee; border-radius: 4px; }
+.bck                                          { background-color: #ffa; padding: 3px; }
+.lnk:hover,
+.lnk:visited,
+.lnk                                          { color: #444; }
+
+.form .group                                  { margin-bottom: 10px; }
+.form .labelform                              { display: block; font-size: 16px; }
+.form .textarea                               { width: 100%; max-width: 600px; height: 20px; font-size: 14px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
+.form .textfield                              { height: 20px; font-size: 16px; border: 1px solid #999; border-radius: 2px; }
+.form .submit                                 { display: block; padding: 5px 20px; }
+.form .textarea                               { height: 130px; }
+.form .group .textarea                        { margin-bottom: 0; }
+
+.userinfo .avatar img                         { width: 48px; height: 48px; }
+.userinfo .username                           { position: relative; left: 15px; display: inline; font-size: 28px; color: #444; font-weight: normal; }
+.userinfo .about                              { color: #666; font-style: italic; margin: 20px 0; }
+.userinfo .meta-data                          { list-style: none; padding: 0; margin: 30px 0; }
+.userinfo .meta-data li                       { line-height: 1.6em; }
+
+.profile-form                                 { border: 1px solid #DDD; padding: 20px; background-color: #fff; border-image: initial; margin-bottom: 20px; }
+.profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
+
+#comments                                     { margin-top: 40px; }
+.comment                                      { position: relative; width: 800px; display: block; min-height: 50px; padding: 10px 10px 20px; margin-bottom: 20px; border: 1px solid #ddd; background-color: #fff; box-shadow: 1px 1px 5px #aaa; border-radius: 3px; }
+.comment .avatar                              { position: absolute; top: 13px; left: 10px; width: 48px; height: 48px; }
+.comment .info                                { position: relative; left: 60px; font-size: 14px; color: #999; }
+.comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier, monospace; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; margin: 0}
+
+.singlecomment                                { margin: 10px 0; }
+.commentreplies .title                        { font-weight: normal; border-bottom: 1px solid #999; margin-top: 0; }
+
+.share                                        { padding: 0px 0 10px 0; }
+.share .twitter-share-button                  { height: 25px !important; }
+
+.footer .lnk                                  { color: #444; }
+
+/*
 #main                                         { margin: 20px 30px 0 30px; }
 .news-title                                   { display: inline; font-size: 22px; line-height: 40px; font-weight: 300; }
 .news-article                                 { margin: 20px 0; }
@@ -131,7 +194,7 @@ td { vertical-align: top; }
 .profile-form                                 { border: 1px solid #DDD; padding: 20px; background-color: whiteSmoke; border-image: initial; }
 .profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
 .mini-cont                                    { display: inline; }
-
+*/
 
 
 
@@ -158,12 +221,21 @@ td { vertical-align: top; }
 @media only screen and (max-width: 720px) {
 
   .header                                     {  }
+  .header .logo                               { margin: 25px 10px 0; display: block; font-size: 22px; }
+  .header .menu                               { display: block; margin: 10px 0 0; padding: 0; font-weight: 300; }
+  #main                                       { margin: 20px 8px 0 5px; }
+  .news-title                                 { line-height: 1.2em; margin-bottom: 10px; }
+  .mini-cont                                  { display: block; }
+
+  /*
+  .header                                     {  }
   .header .logo                               { margin: 25px 10px 0; display: block; }
   .header .menu                               { display: block; margin: 10px 0 0; padding: 0; font-weight: 300; }
   #main                                       { margin: 20px 5px 0 5px; }
   .news-title                                 { line-height: 1.4em; }
   .news-article .meta-data                    { margin: 10px 0 0 0; }
   .mini-cont                                  { display: block; }
+  */
 
 }
 

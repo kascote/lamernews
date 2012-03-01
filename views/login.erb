@@ -1,11 +1,16 @@
 <section id="login">
   <form id="loginform" class="form" name="f">
-    <label class="labelform" for="username">nombre de usuario</label>
-    <input class="textfield" type="text" id="username" name="username">
-    <label class="labelform" for="password">clave</label>
-    <input class="textfield" type="password" id="password" name="password">
-    <input type="checkbox" name="register" value="1">
-    <label class="labelform" for="register">crear cuenta</label>
+    <fieldset class="group">
+      <label class="labelform" for="username">nombre de usuario</label>
+      <input class="textfield" type="text" id="username" name="username">
+    </fieldset>
+    <fieldset class="group">
+      <label class="labelform" for="password">clave</label>
+      <input class="textfield" type="password" id="password" name="password">
+    </fieldset>
+    <fieldset class="group">
+      <label class="labelform" for="register"><input type="checkbox" name="register" value="1"> crear cuenta</label>
+    </fieldset>
     <button class="submit" type="submit">conectarse</button>
   </form>
 </section>

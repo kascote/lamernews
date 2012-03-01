@@ -1,5 +1,5 @@
 <h2 class="page-title"><span class="bck">tus comentarios</span></h2>
-<div id="comments">
+<div id="comments" class="clearfix">
   <% comments.each do |c| %>
     <% if c['del'] || (c['del'].to_i == 1) %>
       <article class="comment deleted">[comentario borrado]</article>

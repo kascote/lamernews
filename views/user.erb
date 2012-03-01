@@ -3,9 +3,7 @@
     <img src="<%= gravatar_url(user) %>">
   </span>
   <h1 class="username"><%= entities(user['username']) %></h1>
-  <pre class="about">
-  <%= user['about'] %>
-  </pre>
+  <pre class="about"><%= user['about'] %></pre>
   <ul class="meta-data">
     <li>cuenta creada hace <%= "#{(Time.now.to_i-user['ctime'].to_i)/(3600*24)} días" %></li>
     <li>karma <%= user['karma'] %> puntos</li>
@@ -22,12 +20,18 @@
   <fieldset class="profile-form">
     <legend>Profile</legend>
     <form id="profileform" class="form" name="f">
-      <label class="labelform" for="email">email (no visible, usado por gravatar)</label>
-      <input class="textfield" type="text" id="email" name="email" size="40" value="<%= entities(user['email']) %>">
-      <label class="labelform" for="password">cambiar password (opcional)</label>
-      <input class="textfield" type="password" name="password" size="40">
-      <label class="labelform" for="about">acerca de</label>
-      <textarea id="about" class="textarea" name="about" cols="60" rows="10"><%= entities(user['about']) %></textarea>
+      <fieldset class="group">
+        <label class="labelform" for="email">email (no visible, usado por gravatar)</label>
+        <input class="textfield" type="text" id="email" name="email" size="40" value="<%= entities(user['email']) %>">
+      </fieldset>
+      <fieldset class="group">
+        <label class="labelform" for="password">cambiar password (opcional)</label>
+        <input class="textfield" type="password" name="password" size="40">
+      </fieldset>
+      <fieldset class="group">
+        <label class="labelform" for="about">acerca de</label>
+        <textarea id="about" class="textarea" name="about" cols="60" rows="10"><%= entities(user['about']) %></textarea>
+      </fieldset>
 
       <button class="submit" type="submit">actualizar perfil</button>
       <div id="errormsg"></div>
