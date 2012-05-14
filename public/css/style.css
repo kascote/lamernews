@@ -51,11 +51,11 @@ article .downarrow.disabled,
 .uparrow.disabled                             { visibility: hidden; }
 article.deleted                               { padding-left:20px; color:#999; }
 form textarea                                 { font-family: Courier; font-size:14px; }
-.comment                                      { position:relative; width:500px; display:block; margin-bottom:40px; min-height:50px; }
-.comment .avatar img                          { position:absolute; top:0px; left:0px; width:48px; height:48px; }
-.comment .info                                { position:relative; left:60px; font-size:14px; color:#999; }
+.comment .avatar-container                    { float: left; }
+.comment .avatar                              { width: 48px; height: 48px; }
+.comment .info                                { font-size:14px; color:#999; }
 .comment .info a.reply                        { text-decoration:underline; padding-left:5px; }
-.comment pre                                  { width:50em; position:relative; left:60px; top:10px; font-family: Courier; font-size: 14px; white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word; }
+.comment pre                                  { width: 100%; max-width:50em; position:relative; left:60px; top:10px; font-family: Courier; font-size: 14px; white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word; }
 article.comment .uparrow,
 article.comment .downarrow                    { color:#aaa; font-size:14px; }
 note                                          { color: #666; margin-left:20px; font-size:14px; }

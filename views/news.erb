@@ -12,17 +12,17 @@
                   <% end %>
                 </address>
                 <p class="meta-data">compartida por
-                  <username>
-                    <a href="/user/<%= urlencode(news['username']) %>" class="lnk"><%= entities(news['username']) %></a>
-                  </username>
-                  &nbsp;~&nbsp;
-                  <%= str_elapsed(news["ctime"].to_i) %>
-                  &nbsp;~&nbsp;
+                  <username><a href="/user/<%= urlencode(news['username']) %>" class="lnk"><%= entities(news['username']) %></a></username>
+                  <span class="meta-separator">&nbsp;~&nbsp;</span>
+                  <span class="meta-time"><%= str_elapsed(news["ctime"].to_i) %></span>
+                  <span class="meta-separator">&nbsp;~&nbsp;</span>
+                  <span class="meta-action">
                   <% if news['comments'].to_i == 0 %>
                   <a href="/news/<%= news['id'] %>" class="lnk">comentala</a>
                   <% else %>
                   <a href="/news/<%= news['id'] %>" class="lnk"><%= "#{news['comments']} comentarios" %></a>
                   <% end %>
+                </span>
                 </p>
               </div>
             </td>

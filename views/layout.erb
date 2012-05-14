@@ -44,15 +44,18 @@
       <% end %>
       </nav>
       <h1 class="logo"><a href="/">Nerds in Press</a></h1>
+      <% build_nav do |select| %>
       <nav class="menu">
-        <a class="link-nav" href="/">lo último</a>
-        <a class="link-nav" href="/submit">enviar</a>
+        <a class="link-nav <%= select == '/' ? 'selected' : '' %>" href="/">lo último</a>
+        <a class="link-nav <%= select == 'top' ? 'selected' : '' %>" href="/top">top</a>
+        <a class="link-nav <%= select == 'submit' ? 'selected' : '' %>" href="/submit">enviar</a>
         <% if is_logged_in? %>
           <% count = $user['replies'] || 0 %>
-          <a class="link-nav" href="/replies">respuestas <%= count.to_i > 0 ? "<sup>#{count}</sup>" : "" %></a>
+          <a class="link-nav <%= select == 'replies' ? 'selected' : '' %>" href="/replies">respuestas <%= count.to_i > 0 ? "<sup>#{count}</sup>" : "" %></a>
         <% end %>
         <a class="link-nav" href="http://amphibia.com.ar" target="_blank">blog</a>
       </nav>
+      <% end %>
     </header>
     <div id="cse-search-form" style="text-align: right; width: 400px"></div>
     <div id="main" role="main">

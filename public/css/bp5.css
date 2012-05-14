@@ -75,7 +75,7 @@ td { vertical-align: top; }
 .header .link-nav:visited,
 .header .link-nav                             { color: #666; padding: 0 10px; }
 .header .account                              { float: right; font-weight: 300; margin-right: 20px; }
-.footer                                       { border-top: 5px double #ddd; text-align: center; padding: 20px 0; color: #999; }
+.footer                                       { border-top: 5px double #ddd; text-align: center; padding: 20px 0; color: #999; margin: 50px 0 30px; }
 #login                                        { margin: 20px 0; }
 .page-title                                   { font-weight: normal; }
 #newslist                                     { margin-bottom: 20px; }
@@ -101,7 +101,7 @@ td { vertical-align: top; }
 
 .form .group                                  { margin-bottom: 10px; }
 .form .labelform                              { display: block; font-size: 16px; }
-.form .textarea                               { width: 100%; max-width: 600px; height: 20px; font-size: 14px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
+.form .textarea                               { width: 100%; max-width: 816px; height: 20px; font-size: 14px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
 .form .textfield                              { height: 20px; font-size: 16px; border: 1px solid #999; border-radius: 2px; }
 .form .submit                                 { display: block; padding: 5px 20px; }
 .form .textarea                               { height: 130px; }
@@ -117,89 +117,18 @@ td { vertical-align: top; }
 .profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
 
 #comments                                     { margin-top: 40px; }
-.comment                                      { position: relative; width: 800px; display: block; min-height: 50px; padding: 10px 10px 20px; margin-bottom: 20px; border: 1px solid #ddd; background-color: #fff; box-shadow: 1px 1px 5px #aaa; border-radius: 3px; }
-.comment .avatar                              { position: absolute; top: 13px; left: 10px; width: 48px; height: 48px; }
-.comment .info                                { position: relative; left: 60px; font-size: 14px; color: #999; }
-.comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier, monospace; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; margin: 0}
+.comment                                      { position: relative; max-width: 800px; display: block; min-height: 50px; padding: 10px 10px 20px; margin-bottom: 20px; border: 1px solid #ddd; background-color: #fff; box-shadow: 1px 1px 5px #aaa; border-radius: 3px; }
+.comment .avatar-container                    { float: left; margin: 0 10px 10px 0; }
+.comment pre                                  { clear: both; }
 
 .singlecomment                                { margin: 10px 0; }
 .commentreplies .title                        { font-weight: normal; border-bottom: 1px solid #999; margin-top: 0; }
 
 .share                                        { padding: 0px 0 10px 0; }
-.share .twitter-share-button                  { height: 25px !important; }
+.share .twitter-share-button                  { height: 31px !important; }
 
 .footer .lnk                                  { color: #444; }
-
-/*
-#main                                         { margin: 20px 30px 0 30px; }
-.news-title                                   { display: inline; font-size: 22px; line-height: 40px; font-weight: 300; }
-.news-article                                 { margin: 20px 0; }
-.news-article .domain                         { display: inline; font-style: normal; color: #999; }
-.news-article .meta-data                      { margin: 0 0 0 30px; color: #999; }
-#newslist                                     { margin-top: 50px; }
-.downarrow,
-.uparrow                                      { color: #999; margin: 0 2px; }
-.favicon                                      { margin: 0 3px 0 0; }
-.downarrow.disabled,
-.uparrow.disabled                             { visibility: hidden; }
-.downarrow.voted,
-.uparrow.voted                                { color: #9d9; }
-.downarrow:hover,
-.uparrow:hover                                { color: #f00; text-decoration: none; }
-.lnk:hover,
-.lnk:visited,
-.lnk                                          { color: #444; }
-.header                                       { padding: 10px 0; border-bottom: 5px double #ddd; }
-.header .logo                                 { font-weight: 300; font-style: normal; color: #000; display: inline; margin: 30px; font-size: 28px; }
-.header .menu                                 { display: inline; padding: 0 10px; font-weight: 300; }
-.header .link-nav:visited,
-.header .link-nav                             { color: #666; padding: 0 10px; }
-.header .account                              { float: right; font-weight: 300; }
-.footer                                       { margin-top: 50px; border-top: 5px double #ddd; text-align: center; padding: 20px 0;  }
-#login                                        { margin: 20px 0; }
-#profileform,
-#loginform                                    { width: 300px; }
-#submitnews                                   { width: 400px; }
-.form .textarea,
-.form .textfield                              { width: 300px; height: 20px; font-size: 16px; margin-bottom: 20px; border: 1px solid #999; border-radius: 2px; }
-.form .labelform                              { font-size: 16px; }
-.form .submit                                 { display: block; padding: 5px 20px; }
-.form .textarea                               { width: 600px; height: 130px; }
-#submitnews .textfield                        { width: 400px !important; }
-#comments                                     { margin-top: 50px; }
-.comment                                      { position: relative; width: 800px; display: block; min-height: 50px; margin-bottom: 40px;}
-.comment .avatar                              { position: absolute; top: 0px; left: 0px; width: 48px; height: 48px; }
-.comment .info                                { position: relative; left: 60px; font-size: 14px; color: #999; }
-.comment pre                                  { width: 50em; position: relative; left: 60px; top: 10px; font-family: Courier, monospace; font-size: 14px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; margin: 0}
-#errormsg                                     { width: 400px; color: #F00; font-weight: normal; margin-top: 15px; }
-.userinfo .avatar img                         { width: 48px; height: 48px; }
-.userinfo .username                           { position: relative; left: 15px; display: inline; font-size: 28px; color: #444; font-weight: normal; }
-.userinfo .about                              { color: #666; font-style: italic; margin: 20px; }
-.userinfo .meta-data                          { list-style: none; padding: 0; margin-bottom: 30px; }
-.userinfo .meta-data li                       { line-height: 1.6em; }
-.bck                                          { background-color: #ffa; padding: 3px; }
-.commentreplies                               { margin: 20px 50px 0;}
-.commentreplies .title                        { font-weight: normal; border-bottom: 1px solid #999; }
-.commentreplies .comment                      { margin-bottom: 50px; }
-.comment.deleted                              { margin-bottom: 10px !important; min-height: 20px !important; margin-left: 10px; }
-.page-title                                   { font-weight: normal; }
-.singlecomment                                { background-color: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 10px 30px 0 0; }
-.singlecomment .comment                       { margin-bottom: 0px !important; }
-.acerca                                       { width: 800px; margin: 0 auto; }
-.acerca .text                                 { font-size: 18px; font-weight: 300; line-height: 1.6em; }
-.acerca .news-title                           { margin-top: 40px; }
-.share                                        { padding: 10px 0 20px 0; }
-.share .twitter-share-button                  { height: 25px !important; }
-#cse-search-form                              { float: right; margin-right: 30px; }
-.profile-form                                 { border: 1px solid #DDD; padding: 20px; background-color: whiteSmoke; border-image: initial; }
-.profile-form legend                          { font-weight: normal; font-size: 18px; background-color: #FFA; padding: 0 20px; line-height: 1.4em; }
-.mini-cont                                    { display: inline; }
-*/
-
-
-
-
-
+.link-nav.selected                            { background-color: #AAA; color: white !important; border-radius: 3px; padding: 1px 9px; }
 
 
 
@@ -220,26 +149,31 @@ td { vertical-align: top; }
 
 @media only screen and (max-width: 720px) {
 
-  .header                                     {  }
+  body                                        { line-height: 1.7em; }
   .header .logo                               { margin: 25px 10px 0; display: block; font-size: 22px; }
-  .header .menu                               { display: block; margin: 10px 0 0; padding: 0; font-weight: 300; }
+  .header .menu                               { display: block; margin: 10px 0 0 5px; padding: 0; font-weight: 300; }
+  .header .link-nav:visited,
+  .header .link-nav                           { padding: 0 5px; }
   #main                                       { margin: 20px 8px 0 5px; }
   .news-title                                 { line-height: 1.2em; margin-bottom: 10px; }
+  .news-link                                  { font-size: 20px; }
   .mini-cont                                  { display: block; }
+  .news-container                             { padding: 20px 10px; }
+  .news-container .meta-data                  { margin-top: 20px; }
+  .uparrow                                    { width: 20px; margin-left: 10px; }
+  .vote                                       { width: 42px; }
+  .meta-separator                             { display: none; }
+  .meta-action,
+  .meta-time                                  { display: block; }
+  .form .textfield                            { width: 100%; }
 
-  /*
-  .header                                     {  }
-  .header .logo                               { margin: 25px 10px 0; display: block; }
-  .header .menu                               { display: block; margin: 10px 0 0; padding: 0; font-weight: 300; }
-  #main                                       { margin: 20px 5px 0 5px; }
-  .news-title                                 { line-height: 1.4em; }
-  .news-article .meta-data                    { margin: 10px 0 0 0; }
-  .mini-cont                                  { display: block; }
-  */
+  .comment pre                                { margin: 10px 0 0 0; }
 
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 731px) {
+
+  .form .textfield                            { width: 600px; }
 
 }
 

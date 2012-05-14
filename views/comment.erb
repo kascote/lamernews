@@ -1,7 +1,7 @@
 <% news_id = comment['thread_id'] %>
 <article class="comment clearfix" style="<%= comment_indent(comment) %>" data-comment-id="<%= "#{news_id}-#{comment['id']}" %>" id="<%= "#{news_id}-#{comment['id']}" %>">
-  <span><img class="avatar" src="<%= gravatar_url(user) %>"></span>
-  <span class="info">
+  <div class="avatar-container"><img width="48" height="48" class="avatar" src="<%= gravatar_url(user) %>"></div>
+  <div class="info">
     <span class="username">
       <a href="/user/<%= urlencode(user['username']) %>"><%= entities(user['username']) %></a>
     </span>
@@ -27,6 +27,6 @@
       <a href="/editcomment/<%= "#{news_id}/#{comment['id']}" %>" class="reply">editar</a>
       <%= "(restan #{ (CommentEditTime - (Time.now.to_i-comment['ctime'].to_i))/60 } minutos )" %>
     <% end %>
-  </span> <!-- info -->
+  </div> <!-- info -->
   <pre><%= urls_to_links(entities(comment['body'].strip))%></pre>
 </article>

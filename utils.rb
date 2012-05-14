@@ -822,3 +822,20 @@ end
 def get_apisecret
   "var apisecret = '#{is_logged_in? ? $user['apisecret'] : ''}';"
 end
+
+def get_path_info
+  if (request.path_info == '/')
+    return '/latest'
+  else
+    return "/#{request.path_info.split('/')[1]}"
+  end
+end
+
+def build_nav
+  segments = request.path_info.split('/')
+  if segments.length == 0
+    yield '/'
+  else
+    yield segments[1]
+  end
+end

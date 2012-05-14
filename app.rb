@@ -73,12 +73,32 @@ get '/' do
   get_news(0)
 end
 
+get '/top' do
+  show_top_news(0, 'Notas más votadas')
+end
+
+get '/top/:start' do
+  show_top_news(params[:start].to_i, 'Notas más votadas')
+end
+
 get '/latest' do
-  redirect '/latest/0'
+  get_news(0)
+  #redirect '/latest/0'
 end
 
 get '/latest/:start' do
   get_news(params[:start].to_i)
+end
+
+def show_top_news(start, title)
+  news, numitems = get_top_news(start)
+  pager = -1
+
+  if (start+NewsPerPage) < numitems
+    pager = start+NewsPerPage
+  end
+
+  erb :index, :locals => {:news => news, :pager => pager, :title => title}
 end
 
 def get_news(start, title=nil)

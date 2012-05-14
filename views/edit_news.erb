@@ -4,9 +4,9 @@
   <form id="submitnews" class="form" name="f">
     <input type="hidden" name="news_id" value="<%= news['id'] %>">
     <label class="labelform" for="title">title</label>
-    <input class="textfield" type="text" id="title" name="title" size="80" value="<%= entities(news['title']) %>">
+    <input class="textfield" type="text" id="title" name="title" value="<%= entities(news['title']) %>">
     <label class="labelform" for="url">url</label>
-    <input class="textfield" type="text" id="url" name="url" size="60" value="<%= entities(news['url']) %>">
+    <input class="textfield" type="text" id="url" name="url" value="<%= entities(news['url']) %>">
 
     <p class="info">o si no tiene una url, puede ingresar algún texto</p>
 
