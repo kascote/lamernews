@@ -83,7 +83,7 @@ td { vertical-align: top; }
 .news-article                                 { border: 1px solid #ddd; background-color: #fff; margin-bottom: 20px; border-radius: 3px; width: 100%; box-shadow: 1px 1px 5px #aaa; }
 .news-active                                  { border-left: 4px solid #6E93DB; }
 .news-title                                   { color: #444; font-weight: 300; font-size: 22px; margin: 0 0 5px 0;  text-shadow: 1px 1px 2px #bbb; }
-.news-link:visited                            { color: #aaa !important; text-shadow: none !important; }
+.news-link:visited                            { color: #666 !important; text-shadow: none !important; }
 .vote                                         { width: 52px; text-align: center; vertical-align: middle; }
 .news-container                               { padding: 20px; }
 .news-article .meta-data                      { text-align: right; margin: 0; color: #777; }
