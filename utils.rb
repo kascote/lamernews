@@ -229,7 +229,7 @@ end
 # Doing this in a centralized way offers us the ability to exploit
 # Redis pipelining.
 def get_news_by_id(news_ids,opt={})
-    result = []
+    #result = []
     if !news_ids.is_a? Array
         opt[:single] = true
         news_ids = [news_ids]
@@ -250,23 +250,23 @@ def get_news_by_id(news_ids,opt={})
     # Get all the news
     $r.pipelined {
         news.each{|n|
-            # Adjust rank if too different from the real-time value.
-            hash = {}
-            n.each_slice(2) {|k,v|
-                hash[k] = v
-            }
-            update_news_rank_if_needed(hash) if opt[:update_rank]
-            result << hash
+    #        # Adjust rank if too different from the real-time value.
+    #        hash = {}
+    #        n.each_slice(2) {|k,v|
+    #            hash[k] = v
+    #        }
+            update_news_rank_if_needed(n) if opt[:update_rank]
+    #        result << hash
         }
     }
 
     # Get the associated users information
     usernames = $r.pipelined {
-        result.each{|n|
+        news.each{|n|
             $r.hget("user:#{n["user_id"]}","username")
         }
     }
-    result.each_with_index{|n,i|
+    news.each_with_index{|n,i|
         n["username"] = usernames[i]
     }
 
@@ -274,12 +274,12 @@ def get_news_by_id(news_ids,opt={})
     # registered user.
     if $user
         votes = $r.pipelined {
-            result.each{|n|
+            news.each{|n|
                 $r.zscore("news.up:#{n["id"]}",$user["id"])
                 $r.zscore("news.down:#{n["id"]}",$user["id"])
             }
         }
-        result.each_with_index{|n,i|
+        news.each_with_index{|n,i|
             if votes[i*2]
                 n["voted"] = :up
             elsif votes[(i*2)+1]
@@ -290,7 +290,7 @@ def get_news_by_id(news_ids,opt={})
 
     # Return an array if we got an array as input, otherwise
     # the single element the caller requested.
-    opt[:single] ? result[0] : result
+    opt[:single] ? news[0] : news
 end
 
 # Vote the specified news in the context of a given user.
